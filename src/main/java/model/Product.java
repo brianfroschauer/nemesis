@@ -115,6 +115,7 @@ public class Product {
         this.sales = sales;
     }
 
+    @JsonIgnore
     public Store getStore() {
         return store;
     }
