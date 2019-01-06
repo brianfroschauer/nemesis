@@ -3,29 +3,17 @@ package resources;
 import dao.StoreDAO;
 import dao.UserDAO;
 import dao.exception.ConstraintViolationException;
-import dao.exception.DAOException;
 import dao.exception.NotFoundException;
 import filter.Secured;
 import model.Product;
 import model.Store;
 import model.User;
-import org.glassfish.jersey.media.multipart.FormDataParam;
-import util.EmailSender;
-import util.FileManager;
-import util.Image;
 
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.Base64;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Author: brianfroschauer
@@ -47,7 +35,7 @@ public class UserResource {
     @GET
     @Path("/{username}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUser(@PathParam("username") String username) {
+    public Response getUserByUsername(@PathParam("username") String username) {
         final UserDAO userDao = new UserDAO();
         final Optional<User> optionalUser = userDao.getUser(username);
 
@@ -91,40 +79,6 @@ public class UserResource {
     }
 
     /**
-     * Gets user image.
-     *
-     * @param userId to identify the image.
-     * @return the image in the response.
-     */
-    @GET
-    @Path("/image/{userId}")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getUserImage(@PathParam("userId") Integer userId) {
-        try {
-            final File file = new File("/resources/images/users/" + userId + ".jpg");
-            if (file.exists()) {
-                final String encodedFile = Base64
-                        .getEncoder()
-                        .withoutPadding()
-                        .encodeToString(Files.readAllBytes(file.toPath()));
-
-                final Image image = new Image(encodedFile);
-                return Response.ok(image).build();
-            } else {
-                final File defaultFile = new File("/resources/images/default/default.png");
-                final String encodedFile = Base64
-                        .getEncoder()
-                        .withoutPadding()
-                        .encodeToString(Files.readAllBytes(defaultFile.toPath()));
-                final Image image = new Image(encodedFile);
-                return Response.ok(image).build();
-            }
-        } catch (RuntimeException | IOException e) {
-            throw new DAOException(e.getMessage());
-        }
-    }
-
-    /**
      * Persists a new user in the database.
      *
      * @param user to be persisted.
@@ -139,7 +93,6 @@ public class UserResource {
             final Integer userId = userDao.create(user);
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(userId.toString());
-
             return Response.created(builder.build()).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Username or email already exists");
@@ -192,30 +145,6 @@ public class UserResource {
         final UserDAO userDao = new UserDAO();
         userDao.addProductToUser(userId, productId);
         return Response.ok().build();
-    }
-
-
-    /**
-     * Upload user image.
-     *
-     * @param userId to get from database.
-     * @return the updated user in the response.
-     */
-    @POST
-    @Secured
-    @Path("/images/{userId}")
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.TEXT_PLAIN)
-    public Response uploadUserImage(@PathParam("userId") Integer userId,
-                                    @FormDataParam("file") InputStream inputStream) {
-        try {
-            final String fileName = userId.toString() + ".jpg";
-            final  String filePath = "/users/" + fileName;
-            FileManager.writeImage(inputStream, filePath);
-            return Response.ok("Image uploaded successfully").build();
-        } catch (RuntimeException | IOException e) {
-            throw new DAOException(e.getMessage());
-        }
     }
 
     /**
@@ -298,7 +227,13 @@ public class UserResource {
     public Response deleteUser(@PathParam("userId") Integer userId) {
         final UserDAO userDao = new UserDAO();
         final Optional<User> optionalUser = userDao.get(User.class, userId);
-        optionalUser.ifPresent(userDao::delete);
+
+        if (optionalUser.isPresent()) {
+            final User user = optionalUser.get();
+            userDao.delete(user);
+            return Response.noContent().build();
+        }
+
         throw new NotFoundException("User, " + userId + ", is not found");
     }
 }
