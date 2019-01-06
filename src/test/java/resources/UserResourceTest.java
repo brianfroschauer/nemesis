@@ -31,7 +31,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void getUser() {
+    public void getUserByUsernameTest() {
         final UserDAO userDAO = new UserDAO();
         final User user = new User(
                 "user@mail.com",
@@ -54,7 +54,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void getStoresFromUser() {
+    public void getStoresFromUserTest() {
         final UserDAO userDAO = new UserDAO();
         final StoreDAO storeDAO = new StoreDAO();
 
@@ -66,9 +66,7 @@ public class UserResourceTest extends JerseyTest {
                 "surname");
         final Integer userId = userDAO.create(user);
 
-        final Store store = new Store(
-                "name",
-                "description");
+        final Store store = new Store("name", "description");
         final Integer storeId = storeDAO.create(store);
 
         userDAO.addStoreToUser(userId, storeId);
@@ -84,7 +82,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void getProductsFromUser() {
+    public void getProductsFromUserTest() {
         final UserDAO userDAO = new UserDAO();
         final ProductDAO productDAO = new ProductDAO();
 
@@ -100,11 +98,7 @@ public class UserResourceTest extends JerseyTest {
         final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
         final Integer categoryId = categoryDAO.create(category);
 
-        final Product product = new Product(
-                "name",
-                0,
-                1,
-                category);
+        final Product product = new Product("name", 0, 1, category);
         final Integer productId = productDAO.create(product);
 
         // Add product to user
@@ -124,12 +118,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void getUserImage() {
-        // TODO Test
-    }
-
-    @Test
-    public void createUser() {
+    public void createUserTest() {
         final UserDAO userDAO = new UserDAO();
         final Map<String, String> data = new HashMap<>();
         data.put("email", "user@mail.com");
@@ -151,7 +140,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void addStoreToUser() {
+    public void addStoreToUserTest() {
         final UserDAO userDAO = new UserDAO();
         final StoreDAO storeDAO = new StoreDAO();
 
@@ -185,7 +174,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void addProductToUser() {
+    public void addProductToUserTest() {
         final UserDAO userDAO = new UserDAO();
         final ProductDAO productDAO = new ProductDAO();
         final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
@@ -225,12 +214,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void uploadUserImage() {
-        // TODO Test
-    }
-
-    @Test
-    public void updateUser() {
+    public void updateUserTest() {
         final UserDAO userDAO = new UserDAO();
         final User user = new User(
                 "email@mail.com",
@@ -258,7 +242,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void deleteStoreFromUser() {
+    public void deleteStoreFromUserTest() {
         final UserDAO userDAO = new UserDAO();
         final StoreDAO storeDAO = new StoreDAO();
 
@@ -270,9 +254,7 @@ public class UserResourceTest extends JerseyTest {
                 "surname");
         final Integer userId = userDAO.create(user);
 
-        final Store store = new Store(
-                "name",
-                "description");
+        final Store store = new Store("name", "description");
         final Integer storeId = storeDAO.create(store);
 
         userDAO.addStoreToUser(userId, storeId);
@@ -292,7 +274,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void deleteProductFromUser() {
+    public void deleteProductFromUserTest() {
         final UserDAO userDAO = new UserDAO();
         final ProductDAO productDAO = new ProductDAO();
 
@@ -308,11 +290,7 @@ public class UserResourceTest extends JerseyTest {
         final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
         final Integer categoryId = categoryDAO.create(category);
 
-        final Product product = new Product(
-                "name",
-                0,
-                1,
-                category);
+        final Product product = new Product("name", 0, 1, category);
 
         final Integer productId = productDAO.create(product);
 
@@ -337,7 +315,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void deleteAllProductsFromUser() {
+    public void deleteAllProductsFromUserTest() {
         final UserDAO userDAO = new UserDAO();
         final ProductDAO productDAO = new ProductDAO();
 
@@ -353,11 +331,7 @@ public class UserResourceTest extends JerseyTest {
         final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
         final Integer categoryId = categoryDAO.create(category);
 
-        final Product product = new Product(
-                "name",
-                0,
-                1,
-                category);
+        final Product product = new Product("name", 0, 1, category);
 
         final Integer productId = productDAO.create(product);
 
@@ -382,7 +356,7 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void deleteUser() {
+    public void deleteUserTest() {
         final UserDAO userDAO = new UserDAO();
         final User user = new User(
                 "email@mail.com",
