@@ -190,12 +190,7 @@ public class UserResourceTest extends JerseyTest {
         final Category category = new Category("category");
         final Integer categoryId = categoryDAO.create(category);
 
-        final Product product = new Product(
-                "name",
-                0,
-                1,
-                category);
-
+        final Product product = new Product("name", 0, 1, category);
         final Integer productId = productDAO.create(product);
 
         final Response response = target("users/" + userId + "/products")

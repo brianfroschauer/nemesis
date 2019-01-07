@@ -8,5 +8,6 @@ public class EmailSenderResourceTest {
 
     @Test
     public void sendEmail() {
+
     }
 }
