@@ -29,6 +29,9 @@ public class Store {
     @Column(name = "description")
     private String description;
 
+    @Column(name = "image")
+    private String image;
+
     @ManyToMany(mappedBy = "stores", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> users = new ArrayList<>();
@@ -62,6 +65,14 @@ public class Store {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @JsonIgnore

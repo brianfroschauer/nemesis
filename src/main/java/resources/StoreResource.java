@@ -1,15 +1,21 @@
 package resources;
 
 import dao.StoreDAO;
+import dao.UserDAO;
 import dao.exception.ConstraintViolationException;
+import dao.exception.DAOException;
 import filter.Secured;
 import model.Product;
 import model.Store;
+import model.User;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import util.ImageWriter;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -152,6 +158,38 @@ public class StoreResource {
         final StoreDAO storeDao = new StoreDAO();
         storeDao.addProductToStore(storeId, productId);
         return Response.ok().build();
+    }
+
+    /**
+     * Upload a store image.
+     *
+     * @param storeId to whom the image is uploaded.
+     * @param inputStream image to be uploaded.
+     *
+     * @return a response with status 200 if the image is successfully uploaded.
+     */
+    @POST
+    @Secured
+    @Path("/{storeId}/images")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadStoreImage(@PathParam("storeId") Integer storeId,
+                                    @FormDataParam("file") InputStream inputStream) {
+        final StoreDAO storeDAO = new StoreDAO();
+        final Optional<Store> optionalStore = storeDAO.get(Store.class, storeId);
+        if (optionalStore.isPresent()) {
+            final Store store = optionalStore.get();
+            final String image;
+            try {
+                image = ImageWriter.uploadImage("stores/" + storeId, inputStream);
+            } catch (Exception e) {
+                throw new DAOException(e.getMessage());
+            }
+            store.setImage(image);
+            storeDAO.update(store);
+            return Response.ok().build();
+        } else {
+            throw new dao.exception.NotFoundException("Store with provided id is not found");
+        }
     }
 
     /**

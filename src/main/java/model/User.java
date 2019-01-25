@@ -37,6 +37,9 @@ public class User {
     @Column(name = "surname", nullable = false)
     private String surname;
 
+    @Column(name = "image")
+    private String image;
+
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "address_id")
     private Address address;
@@ -121,6 +124,14 @@ public class User {
         this.surname = surname;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -163,6 +174,14 @@ public class User {
 
     public void removeComment(@NotNull Comment comment) {
         comments.remove(comment);
+    }
+
+    public List<Sale> getPurchases() {
+        return purchases;
+    }
+
+    public void addPurchase(@NotNull Sale sale) {
+        purchases.add(sale);
     }
 
     @Override

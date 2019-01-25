@@ -1,11 +1,15 @@
 package resources;
 
 import dao.ProductDAO;
+import dao.exception.DAOException;
 import filter.Secured;
 import model.Product;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import util.ImageWriter;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +75,38 @@ public class ProductResource {
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(productId.toString());
         return Response.created(builder.build()).build();
+    }
+
+    /**
+     * Upload a product image.
+     *
+     * @param productId to whom the image is uploaded.
+     * @param inputStream image to be uploaded.
+     *
+     * @return a response with status 200 if the image is successfully uploaded.
+     */
+    @POST
+    @Secured
+    @Path("/{productId}/images")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadProductImage(@PathParam("productId") Integer productId,
+                                       @FormDataParam("file") InputStream inputStream) {
+        final ProductDAO productDAO = new ProductDAO();
+        final Optional<Product> optionalProduct = productDAO.get(Product.class, productId);
+        if (optionalProduct.isPresent()) {
+            final Product product = optionalProduct.get();
+            final String image;
+            try {
+                image = ImageWriter.uploadImage("products/" + productId, inputStream);
+            } catch (Exception e) {
+                throw new DAOException(e.getMessage());
+            }
+            product.setImage(image);
+            productDAO.update(product);
+            return Response.ok().build();
+        } else {
+            throw new dao.exception.NotFoundException("Product with provided id is not found");
+        }
     }
 
     /**

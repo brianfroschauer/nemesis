@@ -3,16 +3,20 @@ package resources;
 import dao.StoreDAO;
 import dao.UserDAO;
 import dao.exception.ConstraintViolationException;
+import dao.exception.DAOException;
 import dao.exception.NotFoundException;
 import filter.Secured;
 import model.Product;
 import model.Store;
 import model.User;
+import org.glassfish.jersey.media.multipart.FormDataParam;
+import util.ImageWriter;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -87,13 +91,14 @@ public class UserResource {
      */
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createUser(@Valid User user) {
         final UserDAO userDao = new UserDAO();
         try {
             final Integer userId = userDao.create(user);
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(userId.toString());
-            return Response.created(builder.build()).build();
+            return Response.created(builder.build()).entity(user).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Username or email already exists");
         }
@@ -145,6 +150,38 @@ public class UserResource {
         final UserDAO userDao = new UserDAO();
         userDao.addProductToUser(userId, productId);
         return Response.ok().build();
+    }
+
+    /**
+     * Upload a user image.
+     *
+     * @param userId to whom the image is uploaded.
+     * @param inputStream image to be uploaded.
+     *
+     * @return a response with status 200 if the image is successfully uploaded.
+     */
+    @POST
+    @Secured
+    @Path("/{userId}/images")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    public Response uploadUserImage(@PathParam("userId") Integer userId,
+                                    @FormDataParam("file") InputStream inputStream) {
+        final UserDAO userDAO = new UserDAO();
+        final Optional<User> optionalUser = userDAO.get(User.class, userId);
+        if (optionalUser.isPresent()) {
+            final User user = optionalUser.get();
+            final String image;
+            try {
+                image = ImageWriter.uploadImage("users/" + userId, inputStream);
+            } catch (Exception e) {
+                throw new DAOException(e.getMessage());
+            }
+            user.setImage(image);
+            userDAO.update(user);
+            return Response.ok().build();
+        } else {
+            throw new NotFoundException("User with provided id is not found");
+        }
     }
 
     /**
