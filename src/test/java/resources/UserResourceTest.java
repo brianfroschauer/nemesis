@@ -129,8 +129,8 @@ public class UserResourceTest extends JerseyTest {
 
         final Response response = target("users").request().post(Entity.json(data));
 
-        assertThat(userDAO.getUser("username").isPresent()).isTrue();
-        final User user = userDAO.getUser("username").get();
+        assertThat(userDAO.getUserByUsername("username").isPresent()).isTrue();
+        final User user = userDAO.getUserByUsername("username").get();
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertEquals("http://localhost:9998/users/" + user.getId(), response.getLocation().toString());
@@ -161,8 +161,8 @@ public class UserResourceTest extends JerseyTest {
                 .post(Entity.json(storeData));
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
 
-        assertThat(storeDAO.getStore("name").isPresent()).isTrue();
-        final Store store = storeDAO.getStore("name").get();
+        assertThat(storeDAO.getStoreByName("name").isPresent()).isTrue();
+        final Store store = storeDAO.getStoreByName("name").get();
 
         assertEquals("http://localhost:9998/users/" + userId + "/stores/" + store.getId(), response.getLocation().toString());
 

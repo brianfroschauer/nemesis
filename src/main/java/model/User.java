@@ -63,6 +63,10 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Sale> purchases = new ArrayList<>();
+
     public User(String email, String username, String password, String name, String surname) {
         this.email = email;
         this.username = username;

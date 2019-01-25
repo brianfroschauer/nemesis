@@ -2,6 +2,7 @@ package dao;
 
 import model.Category;
 import model.Product;
+import model.Sale;
 import model.Store;
 import org.junit.Test;
 
@@ -303,6 +304,9 @@ public class StoreDAOTest {
         productDAO.delete(productDAO.get(Product.class, productId).get());
         assertThat(storeDAO.get(Store.class, storeId).get().getProducts().isEmpty()).isTrue();
         assertThat(productDAO.get(Product.class, productId).isPresent()).isFalse();
+
+        assertThat(storeDAO.get(Store.class, storeId).isPresent()).isTrue();
+        storeDAO.delete(storeDAO.get(Store.class, storeId).get());
 
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
         categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());

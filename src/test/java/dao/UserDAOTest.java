@@ -57,7 +57,7 @@ public class UserDAOTest {
                 "name",
                 "surname");
         userDAO.create(user);
-        assertThat(userDAO.getUser("username").isPresent()).isTrue();
+        assertThat(userDAO.getUserByUsername("username").isPresent()).isTrue();
         userDAO.delete(user);
     }
 
@@ -71,7 +71,7 @@ public class UserDAOTest {
                 "name",
                 "surname");
         userDAO.create(user);
-        assertThat(userDAO.getUser("username1").isPresent()).isFalse();
+        assertThat(userDAO.getUserByUsername("username1").isPresent()).isFalse();
         userDAO.delete(user);
     }
 

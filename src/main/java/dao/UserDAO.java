@@ -58,7 +58,7 @@ public class UserDAO extends AbstractDAO<User> {
      *
      * @return an optional user.
      */
-    public Optional<User> getUser(String username) {
+    public Optional<User> getUserByUsername(String username) {
         Transaction tx = null;
         final User user;
         try (Session session = HibernateUtil.openSession()) {

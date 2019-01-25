@@ -24,11 +24,11 @@ public class Sale {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @OneToOne(targetEntity = User.class)
+    @ManyToOne(targetEntity = User.class)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
     @JoinTable(
             name = "SALE_PRODUCT",
             joinColumns = { @JoinColumn(name = "sale_id") },
@@ -36,9 +36,10 @@ public class Sale {
     )
     private List<Product> products = new ArrayList<>();
 
-    public Sale(Store store, User user) {
+    public Sale(Store store, User user, List<Product> products) {
         this.store = store;
         this.user = user;
+        this.products = products;
     }
 
     public Sale() {}

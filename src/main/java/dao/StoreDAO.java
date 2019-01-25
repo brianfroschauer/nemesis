@@ -19,7 +19,7 @@ import java.util.Optional;
  */
 public class StoreDAO extends AbstractDAO<Store> {
 
-    public Optional<Store> getStore(String name) {
+    public Optional<Store> getStoreByName(String name) {
         Transaction tx = null;
         final Store store;
         try (Session session = HibernateUtil.openSession()) {

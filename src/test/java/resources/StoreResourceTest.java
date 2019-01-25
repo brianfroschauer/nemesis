@@ -166,8 +166,8 @@ public class StoreResourceTest extends JerseyTest {
 
         final Response response = target("stores").request().post(Entity.json(data));
 
-        assertThat(storeDAO.getStore("name").isPresent()).isTrue();
-        final Store store = storeDAO.getStore("name").get();
+        assertThat(storeDAO.getStoreByName("name").isPresent()).isTrue();
+        final Store store = storeDAO.getStoreByName("name").get();
 
         assertEquals(Response.Status.CREATED.getStatusCode(), response.getStatus());
         assertEquals("http://localhost:9998/stores/" + store.getId(), response.getLocation().toString());

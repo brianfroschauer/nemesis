@@ -37,7 +37,7 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserByUsername(@PathParam("username") String username) {
         final UserDAO userDao = new UserDAO();
-        final Optional<User> optionalUser = userDao.getUser(username);
+        final Optional<User> optionalUser = userDao.getUserByUsername(username);
 
         if (optionalUser.isPresent()) {
             final User user = optionalUser.get();

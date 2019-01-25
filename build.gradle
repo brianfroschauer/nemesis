@@ -42,6 +42,11 @@ dependencies {
     
     // https://mvnrepository.com/artifact/org.glassfish.jersey.test-framework.providers/jersey-test-framework-provider-grizzly2
     testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.14'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-admin:6.7.0'
+
+    compile 'com.google.cloud:google-cloud-storage:1.59.0'
     
     // https://mvnrepository.com/artifact/org.assertj/assertj-core
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
