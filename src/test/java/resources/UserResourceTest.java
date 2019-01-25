@@ -10,6 +10,7 @@ import model.Product;
 import model.Store;
 import model.User;
 
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
@@ -27,7 +28,8 @@ public class UserResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(UserResource.class);
+        return new ResourceConfig(UserResource.class)
+                .register(MultiPartFeature.class);
     }
 
     @Test

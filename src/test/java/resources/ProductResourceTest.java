@@ -4,6 +4,7 @@ import dao.AbstractDAO;
 import dao.ProductDAO;
 import model.Category;
 import model.Product;
+import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.test.JerseyTest;
 import org.junit.Test;
@@ -21,7 +22,8 @@ public class ProductResourceTest extends JerseyTest {
 
     @Override
     protected Application configure() {
-        return new ResourceConfig(ProductResource.class);
+        return new ResourceConfig(ProductResource.class)
+                .register(MultiPartFeature.class);
     }
 
     @Test
