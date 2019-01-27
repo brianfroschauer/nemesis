@@ -11,8 +11,8 @@ import java.util.Properties;
  */
 public class EmailSender {
 
-    private final String username = "nemesisservice2018@gmail.com";
-    private final String password = "Nemesis2018";
+    private static final String username = "nemesisservice2018@gmail.com";
+    private static final String password = "Nemesis2018";
     private Properties props = new Properties();
     private Session session;
 
