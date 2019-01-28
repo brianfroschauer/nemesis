@@ -16,15 +16,6 @@ public class ImageWriter {
 
     private static final String bucketName = "nemesis-8be1b.appspot.com";
 
-    public ImageWriter() throws Exception {
-        final FirebaseOptions options = new FirebaseOptions.Builder()
-                .setCredentials(GoogleCredentials.getApplicationDefault())
-                .setStorageBucket(bucketName)
-                .build();
-
-        FirebaseApp.initializeApp(options);
-    }
-
     /**
      * Upload image to Google Cloud Storage for Nemesis.
      *
@@ -33,7 +24,18 @@ public class ImageWriter {
      *
      * @return the media link of the new image.
      */
-    public static String uploadImage(String fileName, InputStream inputStream) {
+    public static String uploadImage(String fileName, InputStream inputStream) throws Exception {
+        try {
+            final FirebaseOptions options = new FirebaseOptions.Builder()
+                    .setCredentials(GoogleCredentials.getApplicationDefault())
+                    .setStorageBucket(bucketName)
+                    .build();
+
+            FirebaseApp.initializeApp(options);
+        } catch (IllegalStateException e) {
+            FirebaseApp.getInstance();
+        }
+
         final Bucket bucket = StorageClient.getInstance().bucket();
         return bucket.create(fileName, inputStream).getMediaLink();
     }
