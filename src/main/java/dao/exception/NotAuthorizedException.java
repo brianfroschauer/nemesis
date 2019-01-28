@@ -1,5 +1,7 @@
 package dao.exception;
 
+import util.ErrorMessage;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -22,6 +24,6 @@ public class NotAuthorizedException extends WebApplicationException {
      */
     public NotAuthorizedException(String message) {
         super(Response.status(Response.Status.UNAUTHORIZED).
-                entity(message).type("text/plain").build());
+                entity(new ErrorMessage("401", message)).type("application/json").build());
     }
 }

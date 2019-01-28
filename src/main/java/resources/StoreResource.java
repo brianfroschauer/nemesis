@@ -1,13 +1,11 @@
 package resources;
 
 import dao.StoreDAO;
-import dao.UserDAO;
 import dao.exception.ConstraintViolationException;
 import dao.exception.DAOException;
 import filter.Secured;
 import model.Product;
 import model.Store;
-import model.User;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import util.ImageWriter;
 
@@ -173,7 +171,7 @@ public class StoreResource {
     @Path("/{storeId}/images")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     public Response uploadStoreImage(@PathParam("storeId") Integer storeId,
-                                    @FormDataParam("file") InputStream inputStream) {
+                                     @FormDataParam("file") InputStream inputStream) {
         final StoreDAO storeDAO = new StoreDAO();
         final Optional<Store> optionalStore = storeDAO.get(Store.class, storeId);
         if (optionalStore.isPresent()) {

@@ -124,11 +124,9 @@ public class UserResource {
         try {
             final Integer storeId = storeDAO.create(store);
             userDao.addStoreToUser(userId, storeId);
-
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(storeId.toString());
-
-            return Response.created(builder.build()).build();
+            return Response.created(builder.build()).entity(store).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Store, " + store.getName() + ", already exists");
         }

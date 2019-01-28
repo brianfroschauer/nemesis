@@ -6,7 +6,7 @@ package util;
  */
 public class Key {
 
-    private final static String secret = "IZ7dyEo1zAWVaLKQPwANJWtD7021SQ0S";
+    private static final String secret = "IZ7dyEo1zAWVaLKQPwANJWtD7021SQ0S";
 
     public static String getSecret() {
         return secret;

@@ -1,5 +1,7 @@
 package dao.exception;
 
+import util.ErrorMessage;
+
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -22,6 +24,6 @@ public class DAOException extends WebApplicationException {
      */
     public DAOException(String message) {
         super(Response.status(Response.Status.INTERNAL_SERVER_ERROR).
-                entity(message).type("text/plain").build());
+                entity(new ErrorMessage("500", message)).type("application/json").build());
     }
 }

@@ -59,10 +59,11 @@ public class AuthenticationEndpoint {
      * @return the issued token.
      */
     private Token issueToken(String username) {
+        final int expiration = 3600; // Expiration time in seconds
         String token = Jwts.builder().signWith(SignatureAlgorithm.HS256, Key.getSecret())
                 .claim("username", username)
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .setExpiration(new Date(System.currentTimeMillis() + 1000 * expiration))
                 .compact();
-        return new Token(token);
+        return new Token(token, expiration);
     }
 }
