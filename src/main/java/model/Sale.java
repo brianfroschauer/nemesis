@@ -1,9 +1,11 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -35,6 +37,16 @@ public class Sale {
             inverseJoinColumns = { @JoinColumn(name = "product_id") }
     )
     private List<Product> products = new ArrayList<>();
+
+    @Column(name = "amount")
+    private double amount;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "date")
+    private Date date;
+
+    @JsonIgnore
+    private String requestKey;
 
     public Sale(Store store, User user, List<Product> products) {
         this.store = store;
@@ -70,6 +82,30 @@ public class Sale {
 
     public void setProducts(List<Product> products) {
         this.products = products;
+    }
+
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
+    public String getRequestKey() {
+        return requestKey;
+    }
+
+    public void setRequestKey(String requestKey) {
+        this.requestKey = requestKey;
     }
 
     @Override

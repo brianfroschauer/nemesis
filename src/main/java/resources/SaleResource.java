@@ -1,14 +1,13 @@
 package resources;
 
 import dao.SaleDAO;
-import dao.UserDAO;
+import filter.Secured;
 import model.Sale;
-import model.Store;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
-import java.util.List;
+import java.util.*;
 
 /**
  * Author: brianfroschauer
@@ -28,8 +27,9 @@ public class SaleResource {
      * @return the URI of the new resource in the response.
      */
     @POST
+    @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createUser(@Valid Sale sale) {
+    public Response createSale(@Valid Sale sale) {
         final SaleDAO saleDAO = new SaleDAO();
         final Integer saleId = saleDAO.create(sale);
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
@@ -44,7 +44,8 @@ public class SaleResource {
      * @return a list of user's sales in the response.
      */
     @GET
-    @Path("/{userId}/sales")
+    @Secured
+    @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserPurchases(@PathParam("userId") Integer userId) {
         final SaleDAO saleDAO = new SaleDAO();
