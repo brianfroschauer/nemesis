@@ -13,8 +13,8 @@ public class EmailSender {
 
     private static final String username = "nemesisservice2018@gmail.com";
     private static final String password = "Nemesis2018";
-    private Properties props = new Properties();
-    private Session session;
+    private static Properties props = new Properties();
+    private static Session session;
 
     public EmailSender() {
         setupProperties();
@@ -28,7 +28,7 @@ public class EmailSender {
         props.put("mail.smtp.port", "587");
     }
 
-    private void setSession(){
+    private static void setSession(){
         session = Session.getInstance(props, new javax.mail.Authenticator() {
             protected PasswordAuthentication getPasswordAuthentication() {
                 return new PasswordAuthentication(username, password);
@@ -36,7 +36,7 @@ public class EmailSender {
         });
     }
 
-    public void send(String recipient, String subject, String text) {
+    public static void send(String recipient, String subject, String text) {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
