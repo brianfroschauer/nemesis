@@ -100,7 +100,7 @@ public class StoreResource {
     }
 
     /**
-     * Search stores by key.
+     * Search stores by key. TESTEARRRRRRRRRRRRR
      *
      * @param key to be search.
      *
