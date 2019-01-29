@@ -38,3 +38,4 @@ gradle-app.setting
 /out/
 /nemesis.iml
 /classes/
+/db/mydb.lck
