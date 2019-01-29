@@ -74,7 +74,7 @@ public class ProductResource {
         final Integer productId = productDao.create(product);
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(productId.toString());
-        return Response.created(builder.build()).build();
+        return Response.created(builder.build()).entity(product).build();
     }
 
     /**
