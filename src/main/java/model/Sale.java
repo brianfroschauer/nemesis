@@ -1,6 +1,5 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
@@ -44,9 +43,6 @@ public class Sale {
     @Temporal(TemporalType.DATE)
     @Column(name = "date")
     private Date date;
-
-    @JsonIgnore
-    private String requestKey;
 
     public Sale(Store store, User user, List<Product> products) {
         this.store = store;
@@ -98,14 +94,6 @@ public class Sale {
 
     public void setDate(Date date) {
         this.date = date;
-    }
-
-    public String getRequestKey() {
-        return requestKey;
-    }
-
-    public void setRequestKey(String requestKey) {
-        this.requestKey = requestKey;
     }
 
     @Override

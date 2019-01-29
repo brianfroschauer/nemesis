@@ -10,6 +10,7 @@ import model.Product;
 import model.Store;
 import model.User;
 import org.glassfish.jersey.media.multipart.FormDataParam;
+import org.mindrot.jbcrypt.BCrypt;
 import util.ImageWriter;
 
 import javax.persistence.PersistenceException;
@@ -95,7 +96,9 @@ public class UserResource {
     public Response createUser(@Valid User user) {
         final UserDAO userDao = new UserDAO();
         try {
+            user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
             final Integer userId = userDao.create(user);
+
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(userId.toString());
             return Response.created(builder.build()).entity(user).build();

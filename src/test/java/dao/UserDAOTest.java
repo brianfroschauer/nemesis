@@ -18,36 +18,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class UserDAOTest {
 
     @Test
-    public void invalidUserAuthenticationTest() {
-        final UserDAO userDAO = new UserDAO();
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        userDAO.create(user);
-        final Optional<User> optionalUser = userDAO.authenticateUser("username1", "password1");
-        assertThat(optionalUser.isPresent()).isFalse();
-        userDAO.delete(user);
-    }
-
-    @Test
-    public void validUserAuthenticationTest() {
-        final UserDAO userDAO = new UserDAO();
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        userDAO.create(user);
-        final Optional<User> optionalUser = userDAO.authenticateUser(user.getUsername(), user.getPassword());
-        assertThat(optionalUser.isPresent()).isTrue();
-        userDAO.delete(user);
-    }
-
-    @Test
     public void getValidUserByUsernameTest() {
         final UserDAO userDAO = new UserDAO();
         final User user = new User(
