@@ -38,3 +38,7 @@ gradle-app.setting
 /out/
 /nemesis.iml
 /classes/
+/db/
+/lib/
+db/mydb.lck
+db/mydb.tmp/
