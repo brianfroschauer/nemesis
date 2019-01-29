@@ -24,6 +24,6 @@ public class ConstraintViolationException extends WebApplicationException {
      */
     public ConstraintViolationException(String message) {
         super(Response.status(Response.Status.CONFLICT).
-                entity(new ErrorMessage("409", message)).type("application/json").build());
+                entity(new ErrorMessage(Response.Status.CONFLICT.getStatusCode(), message)).type("application/json").build());
     }
 }

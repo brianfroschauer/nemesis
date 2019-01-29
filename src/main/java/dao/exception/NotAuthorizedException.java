@@ -24,6 +24,6 @@ public class NotAuthorizedException extends WebApplicationException {
      */
     public NotAuthorizedException(String message) {
         super(Response.status(Response.Status.UNAUTHORIZED).
-                entity(new ErrorMessage("401", message)).type("application/json").build());
+                entity(new ErrorMessage(Response.Status.UNAUTHORIZED.getStatusCode(), message)).type("application/json").build());
     }
 }

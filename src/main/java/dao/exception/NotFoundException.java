@@ -24,6 +24,6 @@ public class NotFoundException extends WebApplicationException {
      */
     public NotFoundException(String message) {
         super(Response.status(Response.Status.NOT_FOUND)
-                .entity(new ErrorMessage("404", message)).type("application/json").build());
+                .entity(new ErrorMessage(Response.Status.NOT_FOUND.getStatusCode(), message)).type("application/json").build());
     }
 }

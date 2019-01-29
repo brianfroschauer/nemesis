@@ -24,6 +24,6 @@ public class DAOException extends WebApplicationException {
      */
     public DAOException(String message) {
         super(Response.status(Response.Status.INTERNAL_SERVER_ERROR).
-                entity(new ErrorMessage("500", message)).type("application/json").build());
+                entity(new ErrorMessage(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), message)).type("application/json").build());
     }
 }
