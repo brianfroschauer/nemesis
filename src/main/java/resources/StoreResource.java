@@ -170,6 +170,7 @@ public class StoreResource {
     @Secured
     @Path("/{storeId}/images")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadStoreImage(@PathParam("storeId") Integer storeId,
                                      @FormDataParam("file") InputStream inputStream) {
         final StoreDAO storeDAO = new StoreDAO();
@@ -184,7 +185,7 @@ public class StoreResource {
             }
             store.setImage(image);
             storeDAO.update(store);
-            return Response.ok().build();
+            return Response.ok(store).build();
         } else {
             throw new dao.exception.NotFoundException("Store with provided id is not found");
         }

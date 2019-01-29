@@ -89,6 +89,7 @@ public class ProductResource {
     @Secured
     @Path("/{productId}/images")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadProductImage(@PathParam("productId") Integer productId,
                                        @FormDataParam("file") InputStream inputStream) {
         final ProductDAO productDAO = new ProductDAO();
@@ -103,7 +104,7 @@ public class ProductResource {
             }
             product.setImage(image);
             productDAO.update(product);
-            return Response.ok().build();
+            return Response.ok(product).build();
         } else {
             throw new dao.exception.NotFoundException("Product with provided id is not found");
         }

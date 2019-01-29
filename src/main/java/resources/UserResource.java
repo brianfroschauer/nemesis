@@ -165,6 +165,7 @@ public class UserResource {
     @Secured
     @Path("/{userId}/images")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadUserImage(@PathParam("userId") Integer userId,
                                     @FormDataParam("file") InputStream inputStream) {
         final UserDAO userDAO = new UserDAO();
@@ -179,7 +180,7 @@ public class UserResource {
             }
             user.setImage(image);
             userDAO.update(user);
-            return Response.ok().build();
+            return Response.ok(user).build();
         } else {
             throw new NotFoundException("User with provided id is not found");
         }
