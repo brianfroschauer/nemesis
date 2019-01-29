@@ -52,9 +52,9 @@ public class StoreDAO extends AbstractDAO<Store> {
         final List<Product> list;
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
-            final String hql = "SELECT products " +
-                               "FROM Store store JOIN store.products products " +
-                               "WHERE store.id = :storeId AND products.category.id = :categoryId";
+            final String hql = "SELECT product " +
+                               "FROM Product product " +
+                               "WHERE product.store.id = :storeId AND product.category.id = :categoryId";
             final Query<Product> query = session.createQuery(hql, Product.class);
             query.setParameter("storeId", storeId);
             query.setParameter("categoryId", categoryId);
