@@ -1,5 +1,6 @@
 package resources;
 
+import dao.ProductDAO;
 import dao.StoreDAO;
 import dao.exception.ConstraintViolationException;
 import dao.exception.DAOException;
@@ -143,7 +144,7 @@ public class StoreResource {
      * Add product to store with the specified ID.
      *
      * @param storeId to get from database.
-     * @param productId to be added to the store.
+     * @param product to be added to the store.
      *
      * @return the created product in the response.
      */
@@ -152,10 +153,12 @@ public class StoreResource {
     @Path("/{storeId}/products")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addProductToStore(@PathParam("storeId") Integer storeId, Integer productId) {
+    public Response addProductToStore(@PathParam("storeId") Integer storeId, @Valid Product product) {
         final StoreDAO storeDao = new StoreDAO();
+        final ProductDAO productDAO = new ProductDAO();
+        final Integer productId = productDAO.create(product);
         storeDao.addProductToStore(storeId, productId);
-        return Response.ok().build();
+        return Response.ok(product).build();
     }
 
     /**
@@ -170,7 +173,6 @@ public class StoreResource {
     @Secured
     @Path("/{storeId}/images")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
     public Response uploadStoreImage(@PathParam("storeId") Integer storeId,
                                      @FormDataParam("file") InputStream inputStream) {
         final StoreDAO storeDAO = new StoreDAO();
