@@ -20,36 +20,6 @@ import java.util.Optional;
 public class UserDAO extends AbstractDAO<User> {
 
     /**
-     * Authenticate the user with provided credentials, and return an optional user.
-     * If credentials are valid, it returns an optional with the user, otherwise it
-     * returns an empty optional.
-     *
-     * @param username of the user to be authenticated.
-     * @param password of the user to be authenticated.
-     *
-     * @return an optional user.
-     */
-    public Optional<User> authenticateUser(String username, String password) {
-        Transaction tx = null;
-        final User user;
-        try (Session session = HibernateUtil.openSession()) {
-            tx = session.beginTransaction();
-            final String hql = "SELECT user " +
-                               "FROM User user " +
-                               "WHERE user.username = :username AND user.password = :password";
-            final Query<User> query = session.createQuery(hql, User.class);
-            query.setParameter("username", username);
-            query.setParameter("password", password);
-            user = query.uniqueResult();
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-        return Optional.ofNullable(user);
-    }
-
-    /**
      * Get a user with provided username, and return an optional user.
      * If the username provided are invalid, it returns an empty optional,
      * otherwise it returns an optional with the user.

@@ -8,6 +8,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 import model.User;
 
+import org.mindrot.jbcrypt.BCrypt;
 import util.Credentials;
 import util.Key;
 import util.Token;
@@ -42,14 +43,20 @@ public class AuthenticationEndpoint {
         final UserDAO userDao = new UserDAO();
         final String username = credentials.getUsername();
         final String password = credentials.getPassword();
-        final Optional<User> optionalUser = userDao.authenticateUser(username, password);
+
+        final Optional<User> optionalUser = userDao.getUserByUsername(username);
 
         if (optionalUser.isPresent()) {
-            final Token token = issueToken(username);
-            return Response.ok(token).build();
+            final User user = optionalUser.get();
+            if (BCrypt.checkpw(password, user.getPassword())) {
+                final Token token = issueToken(username);
+                return Response.ok(token).build();
+            } else {
+                throw new NotAuthorizedException("Invalid password, please try again");
+            }
+        } else {
+            throw new NotAuthorizedException("Invalid username, please try again");
         }
-
-        throw new NotAuthorizedException("Invalid username or password");
     }
 
     /**

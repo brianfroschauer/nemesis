@@ -33,6 +33,9 @@ dependencies {
     // Java mail
     compile group: 'com.sun.mail', name: 'javax.mail', version: '1.6.1'
 
+    // BCrypt
+    compile group: 'org.mindrot', name: 'jbcrypt', version: '0.4'
+
     // Google Cloud Storage
     compile group: 'com.google.firebase', name: 'firebase-admin', version: '6.7.0'
 
