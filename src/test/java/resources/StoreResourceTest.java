@@ -191,22 +191,24 @@ public class StoreResourceTest extends JerseyTest {
         final Integer categoryId = categoryDAO.create(category);
 
         final Product product = new Product("name", 0, 1, category);
-        final Integer productId = productDAO.create(product);
+        // final Integer productId = productDAO.create(product);
 
         final Response response = target("stores/" + storeId + "/products")
                 .request()
-                .post(Entity.entity(productId, MediaType.APPLICATION_JSON));
+                .post(Entity.entity(product, MediaType.APPLICATION_JSON));
 
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
 
+        final List<Product> productsFromStore = storeDAO.getProductsFromStore(storeId);
+
         // Delete entities from database
         assertThat(storeDAO.get(Store.class, storeId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
+        assertThat(productDAO.get(Product.class, productsFromStore.get(0).getId()).isPresent()).isTrue();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
         storeDAO.delete(storeDAO.get(Store.class, storeId).get());
 
         assertThat(storeDAO.get(Store.class, storeId).isPresent()).isFalse();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isFalse();
+        assertThat(productDAO.get(Product.class, productsFromStore.get(0).getId()).isPresent()).isFalse();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
 
         categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
