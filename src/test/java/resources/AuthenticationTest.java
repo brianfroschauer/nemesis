@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import util.Credentials;
+import util.ErrorMessage;
 
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.Application;
@@ -48,6 +49,6 @@ public class AuthenticationTest extends JerseyTest {
         final Entity<Credentials> credentialsEntity = Entity.entity(credentials, MediaType.APPLICATION_JSON);
         final Response response = target("auth/login").request().post(credentialsEntity);
         Assert.assertEquals(Response.Status.UNAUTHORIZED.getStatusCode(), response.getStatus());
-        Assert.assertEquals("Invalid username or password", response.readEntity(String.class));
+        Assert.assertEquals("Invalid username or password", response.readEntity(ErrorMessage.class).getMessage());
     }
 }
