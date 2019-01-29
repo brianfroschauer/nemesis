@@ -68,13 +68,13 @@ public class CategoryResource {
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createStore(@Valid Category category) {
+    public Response createCategory(@Valid Category category) {
         final CategoryDAO categoryDAO = new CategoryDAO();
         try {
             final Integer categoryId = categoryDAO.create(category);
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(categoryId.toString());
-            return Response.created(builder.build()).build();
+            return Response.created(builder.build()).entity(category).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Category, " + category.getCategory() + ", already exists");
         }

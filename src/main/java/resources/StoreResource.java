@@ -134,7 +134,7 @@ public class StoreResource {
             final Integer storeId = storeDao.create(store);
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(storeId.toString());
-            return Response.created(builder.build()).build();
+            return Response.created(builder.build()).entity(store).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Store, " + store.getName() + ", already exists");
         }
@@ -158,7 +158,7 @@ public class StoreResource {
         final ProductDAO productDAO = new ProductDAO();
         final Integer productId = productDAO.create(product);
         storeDao.addProductToStore(storeId, productId);
-        return Response.ok(product).build();
+        return Response.ok(product).entity(product).build();
     }
 
     /**
