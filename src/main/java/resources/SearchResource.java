@@ -28,7 +28,7 @@ public class SearchResource {
     @Path("/products/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchProducts(@PathParam("key") String key) {
-        ProductDAO productDao = new ProductDAO();
+        final ProductDAO productDao = new ProductDAO();
         try {
             List<Product> products = productDao.searchProducts(key);
             return Response.ok(products).build();
@@ -47,7 +47,7 @@ public class SearchResource {
     @Path("/stores/{key}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response searchStores(@PathParam("key") String key) {
-        StoreDAO storeDao = new StoreDAO();
+        final StoreDAO storeDao = new StoreDAO();
         try {
             List<Store> stores = storeDao.searchStores(key);
             return Response.ok(stores).build();

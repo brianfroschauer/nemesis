@@ -128,38 +128,6 @@ public class StoreResourceTest extends JerseyTest {
     }
 
     @Test
-    public void searchProductsFromStore() {
-        final StoreDAO storeDAO = new StoreDAO();
-        final ProductDAO productDAO = new ProductDAO();
-
-        final Store store = new Store("name", "description");
-        final Integer storeId = storeDAO.create(store);
-
-        final Category category = new Category("category");
-        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
-        final Integer categoryId = categoryDAO.create(category);
-
-        final Product product = new Product("name", 0, 1, category);
-        final Integer productId = productDAO.create(product);
-
-        // Add product to store
-        storeDAO.addProductToStore(storeId, productId);
-
-        final Response response = target("stores/" + storeId + "/products/nam").request(MediaType.APPLICATION_JSON).get();
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        // Delete entities from database
-        assertThat(storeDAO.get(Store.class, storeId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-
-        storeDAO.delete(storeDAO.get(Store.class, storeId).get());
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isFalse();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
-    }
-
-    @Test
     public void createStore() {
         final StoreDAO storeDAO = new StoreDAO();
         final Map<String, String> data = new HashMap<>();
@@ -191,7 +159,6 @@ public class StoreResourceTest extends JerseyTest {
         final Integer categoryId = categoryDAO.create(category);
 
         final Product product = new Product("name", 0, 1, category);
-        // final Integer productId = productDAO.create(product);
 
         final Response response = target("stores/" + storeId + "/products")
                 .request()
