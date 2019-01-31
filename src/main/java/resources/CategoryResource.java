@@ -4,6 +4,7 @@ import dao.CategoryDAO;
 import dao.exception.ConstraintViolationException;
 import filter.Secured;
 import model.Category;
+import model.Product;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
@@ -45,15 +46,16 @@ public class CategoryResource {
     }
 
     /**
-     * Get all existing categories.
+     * Get category with de specified ID.
      *
-     * @return a list of existing categories in the response.
+     * @return a store with the specified ID in the response.
      */
     @GET
+    @Path("stores/{storeId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAllCategories() {
+    public Response getUsedCategory(@PathParam("storeId") Integer storeId) {
         final CategoryDAO categoryDAO = new CategoryDAO();
-        final List<Category> categories = categoryDAO.getAll(Category.class);
+        final List<Product> categories = categoryDAO.getUsedCategories(storeId);
         return Response.ok(categories).build();
     }
 
