@@ -146,9 +146,8 @@ public class UserResource {
      */
     @POST
     @Secured
-    @Path("/{userId}/products")
-    @Consumes(MediaType.APPLICATION_JSON)
-    public Response addProductToUser(@PathParam("userId") Integer userId, Integer productId) {
+    @Path("/{userId}/products/{productId}")
+    public Response addProductToUser(@PathParam("userId") Integer userId, @PathParam("productId") Integer productId) {
         final UserDAO userDao = new UserDAO();
         userDao.addProductToUser(userId, productId);
         return Response.ok().build();

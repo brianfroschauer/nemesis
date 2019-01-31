@@ -50,7 +50,7 @@ public class CategoryResource {
      * @return a store with the specified ID in the response.
      */
     @GET
-    @Path("stores/{storeId}")
+    @Path("/stores/{storeId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsedCategories(@PathParam("storeId") Integer storeId) {
         final CategoryDAO categoryDAO = new CategoryDAO();
