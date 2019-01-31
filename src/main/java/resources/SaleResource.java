@@ -3,6 +3,7 @@ package resources;
 import dao.SaleDAO;
 import filter.Secured;
 import model.Sale;
+import util.EmailSender;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -34,6 +35,8 @@ public class SaleResource {
         final Integer saleId = saleDAO.create(sale);
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(saleId.toString());
+        EmailSender.sendConfirmationEmail(sale.getUser().getEmail(),
+                "Congratulations on your purchase, " + sale.getUser().getName() + "!");
         return Response.created(builder.build()).build();
     }
 

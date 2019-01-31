@@ -11,6 +11,7 @@ import model.Store;
 import model.User;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import org.mindrot.jbcrypt.BCrypt;
+import util.EmailSender;
 import util.ImageWriter;
 
 import javax.persistence.PersistenceException;
@@ -98,9 +99,9 @@ public class UserResource {
         try {
             user.setPassword(BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()));
             final Integer userId = userDao.create(user);
-
             final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
             builder.path(userId.toString());
+            EmailSender.sendConfirmationEmail(user.getEmail(), "Welcome to Nemesis!");
             return Response.created(builder.build()).entity(user).build();
         } catch (PersistenceException e) {
             throw new ConstraintViolationException("Username or email already exists");
