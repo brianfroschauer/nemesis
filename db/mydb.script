@@ -63,6 +63,6 @@ GRANT DBA TO SA
 SET SCHEMA SYSTEM_LOBS
 INSERT INTO BLOCKS VALUES(0,2147483647,0)
 SET SCHEMA PUBLIC
-INSERT INTO STORE VALUES(2,'Vendedor numero uno de ropa deportiva',NULL,'Adidas')
-INSERT INTO USER VALUES(1,'brianfroschauer@gmail.com',NULL,'Brian','$2a$10$YNwzsjhEzV/VGPm.rcweCuei.M/yOBGjUqQRVlsZYlbOQ/4mbGOwq','Froschauer','brianfroschauer',NULL)
+INSERT INTO STORE VALUES(2,'Vendo ropa deportiva para muchos clubes destacados','https://www.googleapis.com/download/storage/v1/b/nemesis-8be1b.appspot.com/o/stores%2F2?generation=1548886749017960&alt=media','Nike')
+INSERT INTO USER VALUES(1,'bafroschauer@gmail.com','https://www.googleapis.com/download/storage/v1/b/nemesis-8be1b.appspot.com/o/users%2F1?generation=1548886697842173&alt=media','Brian','$2a$10$0tHAu7XeI.swqCcH4q7go.VHhgAXMlUpyPaajWT8S2BPYsMbmoWJi','Froschauer','brianfroschauer',NULL)
 INSERT INTO USER_STORE VALUES(1,2)

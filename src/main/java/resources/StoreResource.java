@@ -100,24 +100,6 @@ public class StoreResource {
     }
 
     /**
-     * Search stores by key. TESTEARRRRRRRRRRRRR
-     *
-     * @param key to be search.
-     *
-     * @return a list with matched products.
-     */
-    @GET
-    @Path("/{storeId}/products/{key}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response searchProductsFromStore(@PathParam("storeId") Integer storeId,
-                                            @PathParam("key") String key) {
-        final StoreDAO storeDao = new StoreDAO();
-        final List<Product> products = storeDao.searchProductsFromStore(storeId, key);
-        return Response.ok(products).build();
-    }
-
-    /**
      * Add a new store in the database.
      *
      * @param store to be created.
