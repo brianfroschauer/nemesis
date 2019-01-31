@@ -16,16 +16,19 @@ import java.util.List;
  */
 public class CategoryDAO extends AbstractDAO<Category> {
 
-    public List<Product> getUsedCategories(Integer storeId) {
+    public List<Category> getUsedCategories(Integer storeId) {
         Transaction tx = null;
-        final List<Product> list;
+        final List<Category> list;
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
+            /**
+             * SELECT Product product from Store store where store.id = :storeId
+             */
             final String hql = "SELECT DISTINCT product.category " +
-                    "FROM Category category JOIN Product product JOIN Store store " +
-                    "WHERE category.id = product.category.id AND product.store.id = :storeId";
+                    "FROM Category category JOIN Product product " +
+                    "ON category.id = product.category.id AND product.store.id = :storeId";
 
-            final Query<Product> query = session.createQuery(hql, Product.class);
+            final Query<Category> query = session.createQuery(hql, Category.class);
             query.setParameter("storeId", storeId);
             list = query.list();
             tx.commit();

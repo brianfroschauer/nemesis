@@ -55,7 +55,7 @@ public class CategoryResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUsedCategory(@PathParam("storeId") Integer storeId) {
         final CategoryDAO categoryDAO = new CategoryDAO();
-        final List<Product> categories = categoryDAO.getUsedCategories(storeId);
+        final List<Category> categories = categoryDAO.getUsedCategories(storeId);
         return Response.ok(categories).build();
     }
 
