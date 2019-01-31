@@ -4,7 +4,6 @@ import dao.CategoryDAO;
 import dao.exception.ConstraintViolationException;
 import filter.Secured;
 import model.Category;
-import model.Product;
 
 import javax.persistence.PersistenceException;
 import javax.validation.Valid;
@@ -53,7 +52,7 @@ public class CategoryResource {
     @GET
     @Path("stores/{storeId}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getUsedCategory(@PathParam("storeId") Integer storeId) {
+    public Response getUsedCategories(@PathParam("storeId") Integer storeId) {
         final CategoryDAO categoryDAO = new CategoryDAO();
         final List<Category> categories = categoryDAO.getUsedCategories(storeId);
         return Response.ok(categories).build();

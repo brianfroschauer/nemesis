@@ -1,7 +1,6 @@
 package dao;
 
 import model.Category;
-import model.Product;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -21,9 +20,6 @@ public class CategoryDAO extends AbstractDAO<Category> {
         final List<Category> list;
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
-            /**
-             * SELECT Product product from Store store where store.id = :storeId
-             */
             final String hql = "SELECT DISTINCT product.category " +
                     "FROM Category category JOIN Product product " +
                     "ON category.id = product.category.id AND product.store.id = :storeId";
