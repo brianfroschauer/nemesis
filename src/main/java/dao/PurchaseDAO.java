@@ -1,6 +1,6 @@
 package dao;
 
-import model.Sale;
+import model.Purchase;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
@@ -12,7 +12,7 @@ import java.util.List;
  * Author: brianfroschauer
  * Date: 2019-01-07
  */
-public class SaleDAO extends AbstractDAO<Sale> {
+public class PurchaseDAO extends AbstractDAO<Purchase> {
 
     /**
      * Get purchases of the user with provided id.
@@ -22,22 +22,22 @@ public class SaleDAO extends AbstractDAO<Sale> {
      *
      * @return a product list.
      */
-    public List<Sale> getUserPurchases(Integer userId) {
+    public List<Purchase> getUserPurchases(Integer userId) {
         Transaction tx = null;
-        final List<Sale> sales;
+        final List<Purchase> purchases;
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
-            final String hql = "SELECT sale " +
-                               "FROM Sale sale " +
-                               "WHERE sale.user.id = :userId";
-            final Query<Sale> query = session.createQuery(hql, Sale.class);
+            final String hql = "SELECT purchase " +
+                               "FROM Purchase purchase " +
+                               "WHERE purchase.user.id = :userId";
+            final Query<Purchase> query = session.createQuery(hql, Purchase.class);
             query.setParameter("userId", userId);
-            sales = query.list();
+            purchases = query.list();
             tx.commit();
         } catch (RuntimeException e) {
             if (tx != null) tx.rollback();
             throw e;
         }
-        return sales;
+        return purchases;
     }
 }

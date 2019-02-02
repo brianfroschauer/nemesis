@@ -25,12 +25,13 @@
         <mapping class="model.User"/>
         <mapping class="model.Store"/>
         <mapping class="model.Product"/>
-        <mapping class="model.Sale"/>
+        <mapping class="model.Purchase"/>
         <mapping class="model.Address"/>
         <mapping class="model.State"/>
         <mapping class="model.Country"/>
         <mapping class="model.Comment"/>
         <mapping class="model.Category"/>
+        <mapping class="model.Item"/>
 
     </session-factory>
 

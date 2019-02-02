@@ -1,9 +1,7 @@
 package model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -67,9 +65,9 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Sale> purchases = new ArrayList<>();
+    private List<Purchase> purchases = new ArrayList<>();
 
     public User(String email, String username, String password, String name, String surname) {
         this.email = email;
@@ -145,11 +143,11 @@ public class User {
         return products;
     }
 
-    public void addProduct(@NotNull Product product) {
+    public void addProduct(Product product) {
         products.add(product);
     }
 
-    public void removeProduct(@NotNull Product product) {
+    public void removeProduct(Product product) {
         products.remove(product);
     }
 
@@ -157,11 +155,11 @@ public class User {
         return stores;
     }
 
-    public void addStore(@NotNull Store store) {
+    public void addStore(Store store) {
         stores.add(store);
     }
 
-    public void removeStore(@NotNull Store store) {
+    public void removeStore(Store store) {
         stores.remove(store);
     }
 
@@ -169,20 +167,16 @@ public class User {
         return comments;
     }
 
-    public void addComment(@NotNull Comment comment) {
+    public void addComment(Comment comment) {
         comments.add(comment);
     }
 
-    public void removeComment(@NotNull Comment comment) {
-        comments.remove(comment);
-    }
-
-    public List<Sale> getPurchases() {
+    public List<Purchase> getPurchases() {
         return purchases;
     }
 
-    public void addPurchase(@NotNull Sale sale) {
-        purchases.add(sale);
+    public void addPurchase(Purchase purchase) {
+        purchases.add(purchase);
     }
 
     @Override

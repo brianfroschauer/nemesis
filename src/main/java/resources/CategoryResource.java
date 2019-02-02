@@ -58,6 +58,14 @@ public class CategoryResource {
         return Response.ok(categories).build();
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllCategories() {
+        final CategoryDAO categoryDAO = new CategoryDAO();
+        final List<Category> categories = categoryDAO.getAll(Category.class);
+        return Response.ok(categories).build();
+    }
+
     /**
      * Add a new store in the database.
      *
@@ -80,5 +88,4 @@ public class CategoryResource {
             throw new ConstraintViolationException("Category, " + category.getCategory() + ", already exists");
         }
     }
-
 }

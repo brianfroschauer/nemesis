@@ -3,7 +3,6 @@ package model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
-import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -39,17 +38,13 @@ public class Product {
     @JoinColumn(name = "category_id", nullable = false)
     private Category category;
 
-    @ManyToMany(mappedBy = "products")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> users = new ArrayList<>();
-
-    @ManyToMany(mappedBy = "products")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> sales = new ArrayList<>();
-
     @ManyToOne
     @JoinColumn(name = "store_id")
     private Store store;
+
+    @ManyToMany(mappedBy = "purchases")
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<User> users = new ArrayList<>();
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -118,15 +113,6 @@ public class Product {
     }
 
     @JsonIgnore
-    public List<User> getSales() {
-        return sales;
-    }
-
-    public void setSales(List<User> sales) {
-        this.sales = sales;
-    }
-
-    @JsonIgnore
     public Store getStore() {
         return store;
     }
@@ -141,14 +127,6 @@ public class Product {
 
     public void setComments(List<Comment> comments) {
         this.comments = comments;
-    }
-
-    public void addUser(@NotNull User user) {
-        users.add(user);
-    }
-
-    public void removeUser(@NotNull User user) {
-        users.remove(user);
     }
 
     @Override

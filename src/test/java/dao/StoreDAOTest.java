@@ -2,7 +2,6 @@ package dao;
 
 import model.Category;
 import model.Product;
-import model.Sale;
 import model.Store;
 import org.junit.Test;
 

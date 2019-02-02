@@ -35,7 +35,6 @@ public class UserResource {
      * Gets user with the specified username.
      *
      * @param username to get from database.
-     *
      * @return a user with the specified username in the response.
      */
     @GET
@@ -88,7 +87,6 @@ public class UserResource {
      * Persists a new user in the database.
      *
      * @param user to be persisted.
-     *
      * @return the URI of the new resource in the response.
      */
     @POST
@@ -121,7 +119,7 @@ public class UserResource {
     @Path("/{userId}/stores")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addStoreToUser(@PathParam("userId") Integer userId, @Valid Store store) {
+    public Response addStoreToUser(@PathParam("userId") Integer userId, Store store) {
         final UserDAO userDao = new UserDAO();
         final StoreDAO storeDAO = new StoreDAO();
 
@@ -141,7 +139,6 @@ public class UserResource {
      *
      * @param userId to get from database.
      * @param productId to be added to the user cart.
-     *
      * @return the created product in the response.
      */
     @POST

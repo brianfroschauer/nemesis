@@ -104,7 +104,7 @@ public class UserResourceTest extends JerseyTest {
         final Integer productId = productDAO.create(product);
 
         // Add product to user
-        userDAO.addProductToUser(userId, productId);
+        //userDAO.addProductToUser(userId, productId);
 
         final Response response = target("users/" + userId + "/products").request(MediaType.APPLICATION_JSON).get();
         assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
@@ -195,7 +195,7 @@ public class UserResourceTest extends JerseyTest {
         final Product product = new Product("name", 0, 1, category);
         final Integer productId = productDAO.create(product);
 
-        final Response response = target("users/" + userId + "/products")
+        final Response response = target("users/" + userId + "/products/" + productId)
                 .request()
                 .post(Entity.entity(productId, MediaType.APPLICATION_JSON));
 
@@ -292,15 +292,15 @@ public class UserResourceTest extends JerseyTest {
         final Integer productId = productDAO.create(product);
 
         // Add product to user
-        userDAO.addProductToUser(userId, productId);
+        //userDAO.addProductToUser(userId, productId);
 
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
         assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
+        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
 
         target("users/" + userId + "/products/" + productId).request().delete();
-        assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
+        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
 
         // Delete entities from database
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
@@ -333,15 +333,15 @@ public class UserResourceTest extends JerseyTest {
         final Integer productId = productDAO.create(product);
 
         // Add product to user
-        userDAO.addProductToUser(userId, productId);
+        //userDAO.addProductToUser(userId, productId);
 
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
         assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
+        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
 
         target("users/" + userId + "/products").request().delete();
-        assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
+        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
 
         // Delete entities from database
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();

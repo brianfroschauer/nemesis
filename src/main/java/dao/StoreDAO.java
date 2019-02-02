@@ -25,8 +25,8 @@ public class StoreDAO extends AbstractDAO<Store> {
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
             final String hql = "SELECT store " +
-                    "FROM Store store " +
-                    "WHERE store.name = :name";
+                               "FROM Store store " +
+                               "WHERE store.name = :name";
             final Query<Store> query = session.createQuery(hql, Store.class);
             query.setParameter("name", name);
             store = query.uniqueResult();

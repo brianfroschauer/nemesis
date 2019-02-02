@@ -1,8 +1,8 @@
 package resources;
 
-import dao.SaleDAO;
+import dao.PurchaseDAO;
 import filter.Secured;
-import model.Sale;
+import model.Purchase;
 import util.EmailSender;
 
 import javax.validation.Valid;
@@ -14,29 +14,29 @@ import java.util.*;
  * Author: brianfroschauer
  * Date: 2019-01-07
  */
-@Path("/sales")
+@Path("/purchases")
 public class SaleResource {
 
     @Context
     private UriInfo uriInfo;
 
     /**
-     * Persists a new sale in the database.
+     * Persists a new purchase in the database.
      *
-     * @param sale to be persisted.
+     * @param purchase to be persisted.
      *
      * @return the URI of the new resource in the response.
      */
     @POST
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createSale(@Valid Sale sale) {
-        final SaleDAO saleDAO = new SaleDAO();
-        final Integer saleId = saleDAO.create(sale);
+    public Response createSale(@Valid Purchase purchase) {
+        final PurchaseDAO purchaseDAO = new PurchaseDAO();
+        final Integer saleId = purchaseDAO.create(purchase);
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(saleId.toString());
-        EmailSender.sendConfirmationEmail(sale.getUser().getEmail(),
-                "Congratulations on your purchase, " + sale.getUser().getName() + "!");
+        EmailSender.sendConfirmationEmail(purchase.getUser().getEmail(),
+                "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
         return Response.created(builder.build()).build();
     }
 
@@ -51,8 +51,8 @@ public class SaleResource {
     @Path("/{userId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserPurchases(@PathParam("userId") Integer userId) {
-        final SaleDAO saleDAO = new SaleDAO();
-        final List<Sale> sales = saleDAO.getUserPurchases(userId);
-        return Response.ok(sales).build();
+        final PurchaseDAO purchaseDAO = new PurchaseDAO();
+        final List<Purchase> purchases = purchaseDAO.getUserPurchases(userId);
+        return Response.ok(purchases).build();
     }
 }

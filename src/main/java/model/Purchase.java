@@ -13,12 +13,12 @@ import java.util.Objects;
  * Date: 2018-12-22
  */
 @Entity
-@Table(name = "sale")
-public class Sale {
+@Table(name = "purchase")
+public class Purchase {
 
     @Id
     @GeneratedValue
-    @Column(name = "sale_id")
+    @Column(name = "purchase_id")
     private Integer id;
 
     @OneToOne(targetEntity = Store.class)
@@ -29,10 +29,10 @@ public class Sale {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
+    @ManyToMany(targetEntity = Product.class)
     @JoinTable(
-            name = "SALE_PRODUCT",
-            joinColumns = { @JoinColumn(name = "sale_id") },
+            name = "PURCHASE_PRODUCT",
+            joinColumns = { @JoinColumn(name = "purchase_id") },
             inverseJoinColumns = { @JoinColumn(name = "product_id") }
     )
     private List<Product> products = new ArrayList<>();
@@ -44,13 +44,13 @@ public class Sale {
     @Column(name = "date")
     private Date date;
 
-    public Sale(Store store, User user, List<Product> products) {
+    public Purchase(Store store, User user, List<Product> products) {
         this.store = store;
         this.user = user;
         this.products = products;
     }
 
-    public Sale() {}
+    public Purchase() {}
 
     public Integer getId() {
         return id;
@@ -100,11 +100,11 @@ public class Sale {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Sale sale = (Sale) o;
-        return id.equals(sale.id) &&
-                store.equals(sale.store) &&
-                user.equals(sale.user) &&
-                products.equals(sale.products);
+        Purchase purchase = (Purchase) o;
+        return id.equals(purchase.id) &&
+                store.equals(purchase.store) &&
+                user.equals(purchase.user) &&
+                products.equals(purchase.products);
     }
 
     @Override

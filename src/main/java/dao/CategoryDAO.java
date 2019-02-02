@@ -21,8 +21,8 @@ public class CategoryDAO extends AbstractDAO<Category> {
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
             final String hql = "SELECT DISTINCT product.category " +
-                    "FROM Category category JOIN Product product " +
-                    "ON category.id = product.category.id AND product.store.id = :storeId";
+                               "FROM Category category JOIN Product product " +
+                               "ON category.id = product.category.id AND product.store.id = :storeId";
 
             final Query<Category> query = session.createQuery(hql, Category.class);
             query.setParameter("storeId", storeId);
@@ -34,5 +34,4 @@ public class CategoryDAO extends AbstractDAO<Category> {
         }
         return list;
     }
-
 }
