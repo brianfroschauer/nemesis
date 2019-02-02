@@ -67,7 +67,7 @@ public class ItemResource {
                 final Item item = optionalItem.get();
                 final Integer newQuantity = item.getQuantity() + quantity;
                 if (newQuantity > stock)
-                    throw new BadRequestException("Quantity, " + quantity + " is greater than stock (" + stock + ")");
+                    throw new BadRequestException("Quantity, " + newQuantity + " is greater than stock (" + stock + ")");
                 item.setQuantity(newQuantity);
                 itemDAO.update(item);
                 return Response.ok(item).build();
