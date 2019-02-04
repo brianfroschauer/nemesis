@@ -1,6 +1,5 @@
 package dao;
 
-import model.Product;
 import model.Store;
 import model.User;
 
@@ -71,29 +70,6 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     /**
-     * Get the products of the user with provided id.
-     * In the case of not having any products, it will return an empty list.
-     *
-     * @param userId from which the products will be obtained.
-     *
-     * @return a product list.
-     */
-    public List<Product> getProductsFromUser(Integer userId) {
-        Transaction tx = null;
-        final List<Product> list;
-        try (Session session = HibernateUtil.openSession()) {
-            tx = session.beginTransaction();
-            final User user = session.get(User.class, userId);
-            list = user.getProducts();
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-        return list;
-    }
-
-    /**
      * Add an existing store to an existing user, both the
      * store and the user must be persisted in the database.
      *
@@ -116,28 +92,6 @@ public class UserDAO extends AbstractDAO<User> {
     }
 
     /**
-     * Add an existing product to an existing user, both the
-     * store and the user must be persisted in the database.
-     *
-     * @param userId to whom the product will be added.
-     * @param productId to be added to the user.
-     */
-    public void addProductToUser(Integer userId, Integer productId) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.openSession()) {
-            tx = session.beginTransaction();
-            final User user = session.get(User.class, userId);
-            final Product product = session.get(Product.class, productId);
-            user.addProduct(product);
-            session.merge(user);
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-    }
-
-    /**
      * Delete the store with the specified id from the user with the specified id.
      * This only deletes the store from the user, it does not deleted the store itself.
      *
@@ -151,47 +105,6 @@ public class UserDAO extends AbstractDAO<User> {
             final User user = session.get(User.class, userId);
             final Store store = session.get(Store.class, storeId);
             user.removeStore(store);
-            session.merge(user);
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-    }
-
-    /**
-     * Delete the product with the specified id from the user with the specified id.
-     * This only deletes the product from the user cart, it does not deleted the product itself.
-     *
-     * @param userId from which the product will be deleted.
-     * @param productId to be deleted from the user.
-     */
-    public void deleteProductFromUser(Integer userId, Integer productId) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.openSession()) {
-            tx = session.beginTransaction();
-            final User user = session.get(User.class, userId);
-            final Product product = session.get(Product.class, productId);
-            user.removeProduct(product);
-            session.merge(user);
-            tx.commit();
-        } catch (RuntimeException e) {
-            if (tx != null) tx.rollback();
-            throw e;
-        }
-    }
-
-    /**
-     * Delete all products from the user with the specified id.
-     *
-     * @param userId from which the products will be deleted.
-     */
-    public void deleteAllProductsFromUser(Integer userId) {
-        Transaction tx = null;
-        try (Session session = HibernateUtil.openSession()) {
-            tx = session.beginTransaction();
-            final User user = session.get(User.class, userId);
-            user.getProducts().clear();
             session.merge(user);
             tx.commit();
         } catch (RuntimeException e) {

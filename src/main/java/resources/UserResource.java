@@ -6,7 +6,6 @@ import dao.exception.ConstraintViolationException;
 import dao.exception.DAOException;
 import dao.exception.NotFoundException;
 import filter.Secured;
-import model.Product;
 import model.Store;
 import model.User;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -50,22 +49,6 @@ public class UserResource {
         }
 
         throw new NotFoundException("User, " + username + ", is not found");
-    }
-
-    /**
-     * Gets a list of products from the specified user.
-     *
-     * @param userId to get from database.
-     * @return a list of user's products in the response.
-     */
-    @GET
-    @Path("/{userId}/products")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response getProductsFromUser(@PathParam("userId") Integer userId) {
-        final UserDAO userDao = new UserDAO();
-        final List<Product> products = userDao.getProductsFromUser(userId);
-        return Response.ok(products).build();
-
     }
 
     /**
@@ -135,22 +118,6 @@ public class UserResource {
     }
 
     /**
-     * Add to the cart the specified product to the user with the specified id.
-     *
-     * @param userId to get from database.
-     * @param productId to be added to the user cart.
-     * @return the created product in the response.
-     */
-    @POST
-    @Secured
-    @Path("/{userId}/products/{productId}")
-    public Response addProductToUser(@PathParam("userId") Integer userId, @PathParam("productId") Integer productId) {
-        final UserDAO userDao = new UserDAO();
-        userDao.addProductToUser(userId, productId);
-        return Response.ok().build();
-    }
-
-    /**
      * Upload a user image.
      *
      * @param userId to whom the image is uploaded.
@@ -214,40 +181,6 @@ public class UserResource {
                                         @PathParam("storeId") Integer storeId) {
         final UserDAO userDao = new UserDAO();
         userDao.deleteStoreFromUser(userId, storeId);
-        return Response.noContent().build();
-    }
-
-    /**
-     * Delete the specified product from the user with the specified ID.
-     *
-     * @param userId who has the store.
-     * @param productId to be deleted.
-     * @return a 204 HTTP status to confirm that the store has been deleted successfully.
-     */
-    @DELETE
-    @Secured
-    @Path("/{userId}/products/{productId}")
-    public Response deleteProductFromUser(@PathParam("userId") Integer userId,
-                                          @PathParam("productId") Integer productId) {
-        final UserDAO userDao = new UserDAO();
-        userDao.deleteProductFromUser(userId, productId);
-        return Response.noContent().build();
-
-    }
-
-    /**
-     * Delete all products from the user with the specified ID.
-     *
-     * @param userId who has the store.
-     *
-     * @return a 204 HTTP status to confirm that the store has been deleted successfully.
-     */
-    @DELETE
-    @Secured
-    @Path("/{userId}/products")
-    public Response deleteAllProductsFromUser(@PathParam("userId") Integer userId) {
-        final UserDAO userDao = new UserDAO();
-        userDao.deleteAllProductsFromUser(userId);
         return Response.noContent().build();
     }
 

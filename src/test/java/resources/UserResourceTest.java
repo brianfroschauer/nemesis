@@ -1,12 +1,8 @@
 package resources;
 
-import dao.AbstractDAO;
-import dao.ProductDAO;
 import dao.StoreDAO;
 import dao.UserDAO;
 
-import model.Category;
-import model.Product;
 import model.Store;
 import model.User;
 
@@ -84,42 +80,6 @@ public class UserResourceTest extends JerseyTest {
     }
 
     @Test
-    public void getProductsFromUserTest() {
-        final UserDAO userDAO = new UserDAO();
-        final ProductDAO productDAO = new ProductDAO();
-
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        final Integer userId = userDAO.create(user);
-
-        final Category category = new Category("category");
-        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
-        final Integer categoryId = categoryDAO.create(category);
-
-        final Product product = new Product("name", 0, 1, category);
-        final Integer productId = productDAO.create(product);
-
-        // Add product to user
-        //userDAO.addProductToUser(userId, productId);
-
-        final Response response = target("users/" + userId + "/products").request(MediaType.APPLICATION_JSON).get();
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        // Delete entities from database
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-
-        userDAO.delete(userDAO.get(User.class, userId).get());
-        productDAO.delete(productDAO.get(Product.class, productId).get());
-        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
-    }
-
-    @Test
     public void createUserTest() {
         final UserDAO userDAO = new UserDAO();
         final Map<String, String> data = new HashMap<>();
@@ -173,41 +133,6 @@ public class UserResourceTest extends JerseyTest {
         assertThat(storeDAO.get(Store.class, store.getId()).isPresent()).isTrue();
         userDAO.delete(userDAO.get(User.class, userId).get());
         storeDAO.delete(storeDAO.get(Store.class, store.getId()).get());
-    }
-
-    @Test
-    public void addProductToUserTest() {
-        final UserDAO userDAO = new UserDAO();
-        final ProductDAO productDAO = new ProductDAO();
-        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
-
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        final Integer userId = userDAO.create(user);
-
-        final Category category = new Category("category");
-        final Integer categoryId = categoryDAO.create(category);
-
-        final Product product = new Product("name", 0, 1, category);
-        final Integer productId = productDAO.create(product);
-
-        final Response response = target("users/" + userId + "/products/" + productId)
-                .request()
-                .post(Entity.entity(productId, MediaType.APPLICATION_JSON));
-
-        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
-
-        // Delete entities from database
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        userDAO.delete(userDAO.get(User.class, userId).get());
-        productDAO.delete(productDAO.get(Product.class, productId).get());
-        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
     }
 
     @Test
@@ -268,88 +193,6 @@ public class UserResourceTest extends JerseyTest {
         assertThat(storeDAO.get(Store.class, store.getId()).isPresent()).isTrue();
         userDAO.delete(userDAO.get(User.class, userId).get());
         storeDAO.delete(storeDAO.get(Store.class, store.getId()).get());
-    }
-
-    @Test
-    public void deleteProductFromUserTest() {
-        final UserDAO userDAO = new UserDAO();
-        final ProductDAO productDAO = new ProductDAO();
-
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        final Integer userId = userDAO.create(user);
-
-        final Category category = new Category("category");
-        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
-        final Integer categoryId = categoryDAO.create(category);
-
-        final Product product = new Product("name", 0, 1, category);
-
-        final Integer productId = productDAO.create(product);
-
-        // Add product to user
-        //userDAO.addProductToUser(userId, productId);
-
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
-
-        target("users/" + userId + "/products/" + productId).request().delete();
-        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
-
-        // Delete entities from database
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        userDAO.delete(userDAO.get(User.class, userId).get());
-        productDAO.delete(productDAO.get(Product.class, productId).get());
-        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
-    }
-
-    @Test
-    public void deleteAllProductsFromUserTest() {
-        final UserDAO userDAO = new UserDAO();
-        final ProductDAO productDAO = new ProductDAO();
-
-        final User user = new User(
-                "email@mail.com",
-                "username",
-                "password",
-                "name",
-                "surname");
-        final Integer userId = userDAO.create(user);
-
-        final Category category = new Category("category");
-        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
-        final Integer categoryId = categoryDAO.create(category);
-
-        final Product product = new Product("name", 0, 1, category);
-
-        final Integer productId = productDAO.create(product);
-
-        // Add product to user
-        //userDAO.addProductToUser(userId, productId);
-
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isFalse();
-
-        target("users/" + userId + "/products").request().delete();
-        //assertThat(userDAO.get(User.class, userId).get().getProducts().isEmpty()).isTrue();
-
-        // Delete entities from database
-        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
-        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
-        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
-        userDAO.delete(userDAO.get(User.class, userId).get());
-        productDAO.delete(productDAO.get(Product.class, productId).get());
-        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
     }
 
     @Test

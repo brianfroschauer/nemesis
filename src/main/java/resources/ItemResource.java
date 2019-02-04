@@ -7,8 +7,6 @@ import dao.exception.DAOException;
 import filter.Secured;
 import model.Item;
 import model.Product;
-import org.glassfish.jersey.media.multipart.FormDataMultiPart;
-import org.glassfish.jersey.media.multipart.FormDataParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

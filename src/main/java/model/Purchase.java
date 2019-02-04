@@ -21,21 +21,21 @@ public class Purchase {
     @Column(name = "purchase_id")
     private Integer id;
 
-    @OneToOne(targetEntity = Store.class)
+    @OneToOne
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToOne(targetEntity = User.class)
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany(targetEntity = Product.class)
+    @ManyToMany
     @JoinTable(
-            name = "PURCHASE_PRODUCT",
+            name = "PURCHASE_ITEM",
             joinColumns = { @JoinColumn(name = "purchase_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
+            inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
-    private List<Product> products = new ArrayList<>();
+    private List<Item> items = new ArrayList<>();
 
     @Column(name = "amount")
     private double amount;
@@ -44,10 +44,10 @@ public class Purchase {
     @Column(name = "date")
     private Date date;
 
-    public Purchase(Store store, User user, List<Product> products) {
+    public Purchase(Store store, User user, List<Item> items) {
         this.store = store;
         this.user = user;
-        this.products = products;
+        this.items = items;
     }
 
     public Purchase() {}
@@ -60,7 +60,7 @@ public class Purchase {
         return store;
     }
 
-    public void setStore(@NotNull Store store) {
+    public void setStore(Store store) {
         this.store = store;
     }
 
@@ -68,16 +68,16 @@ public class Purchase {
         return user;
     }
 
-    public void setUser(@NotNull User user) {
+    public void setUser(User user) {
         this.user = user;
     }
 
-    public List<Product> getProducts() {
-        return products;
+    public List<Item> getItems() {
+        return items;
     }
 
-    public void setProducts(List<Product> products) {
-        this.products = products;
+    public void setItems(List<Item> items) {
+        this.items = items;
     }
 
     public double getAmount() {
@@ -104,11 +104,11 @@ public class Purchase {
         return id.equals(purchase.id) &&
                 store.equals(purchase.store) &&
                 user.equals(purchase.user) &&
-                products.equals(purchase.products);
+                items.equals(purchase.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, store, user, products);
+        return Objects.hash(id, store, user, items);
     }
 }

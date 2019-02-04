@@ -18,7 +18,7 @@ public class Address {
     @Column(name = "address_id")
     private Integer id;
 
-    @OneToOne(targetEntity = State.class)
+    @OneToOne
     @JoinColumn(name = "state_id", nullable = false)
     private State state;
 

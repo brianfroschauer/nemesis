@@ -45,15 +45,6 @@ public class User {
 
     @ManyToMany
     @JoinTable(
-            name = "USER_PRODUCT",
-            joinColumns = { @JoinColumn(name = "user_id") },
-            inverseJoinColumns = { @JoinColumn(name = "product_id") }
-    )
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<Product> products = new ArrayList<>();
-
-    @ManyToMany
-    @JoinTable(
             name = "USER_STORE",
             joinColumns = { @JoinColumn(name = "user_id") },
             inverseJoinColumns = { @JoinColumn(name = "store_id") }
@@ -65,9 +56,13 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Purchase> purchases = new ArrayList<>();
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Item> items = new ArrayList<>();
 
     public User(String email, String username, String password, String name, String surname) {
         this.email = email;
@@ -137,18 +132,6 @@ public class User {
 
     public void setAddress(Address address) {
         this.address = address;
-    }
-
-    public List<Product> getProducts() {
-        return products;
-    }
-
-    public void addProduct(Product product) {
-        products.add(product);
-    }
-
-    public void removeProduct(Product product) {
-        products.remove(product);
     }
 
     public List<Store> getStores() {

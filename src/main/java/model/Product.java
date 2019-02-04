@@ -42,13 +42,13 @@ public class Product {
     @JoinColumn(name = "store_id")
     private Store store;
 
-    @ManyToMany(mappedBy = "purchases")
-    @LazyCollection(LazyCollectionOption.FALSE)
-    private List<User> users = new ArrayList<>();
-
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new ArrayList<>();
+
+    @OneToMany(mappedBy = "product", cascade = CascadeType.REMOVE)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    private List<Item> items = new ArrayList<>();
 
     public Product(String name, Integer price, Integer stock, Category category) {
         this.price = price;
@@ -101,15 +101,6 @@ public class Product {
 
     public void setCategory(Category category) {
         this.category = category;
-    }
-
-    @JsonIgnore
-    public List<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<User> users) {
-        this.users = users;
     }
 
     @JsonIgnore

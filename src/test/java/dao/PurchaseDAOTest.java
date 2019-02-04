@@ -16,6 +16,7 @@ public class PurchaseDAOTest {
         final CategoryDAO categoryDAO = new CategoryDAO();
         final ProductDAO productDAO = new ProductDAO();
         final PurchaseDAO purchaseDAO = new PurchaseDAO();
+        final ItemDAO itemDAO = new ItemDAO();
 
         final User user = new User(
                 "mail@mail.com",
@@ -29,10 +30,10 @@ public class PurchaseDAOTest {
         final Category category = new Category("category");
         final Integer categoryId = categoryDAO.create(category);
 
-        final Product product1 = new Product("product1", 1, 1, category);
-        final Product product2 = new Product("product2", 1, 1, category);
-        final Product product3 = new Product("product3", 1, 1, category);
-        final Product product4 = new Product("product4", 1, 1, category);
+        final Product product1 = new Product("product1", 1, 5, category);
+        final Product product2 = new Product("product2", 1, 5, category);
+        final Product product3 = new Product("product3", 1, 5, category);
+        final Product product4 = new Product("product4", 1, 5, category);
 
         final Integer userId = userDAO.create(user);
         final Integer storeId = storeDAO.create(store);
@@ -47,19 +48,18 @@ public class PurchaseDAOTest {
         storeDAO.addProductToStore(storeId, productId4);
 
         // Sale 1
-        userDAO.addProductToUser(userId, productId1);
-        userDAO.addProductToUser(userId, productId2);
-        final List<Product> products1 = userDAO.getProductsFromUser(userId);
-        final Purchase purchase1 = new Purchase(store, user, products1);
+        itemDAO.addItemToUser(userId, productId1, 1);
+        itemDAO.addItemToUser(userId, productId2, 1);
+        final List<Item> items1 = itemDAO.getItemsFromUser(userId);
+        final Purchase purchase1 = new Purchase(store, user, items1);
         final Integer purchaseId1 = purchaseDAO.create(purchase1);
 
         // Sale 2
-        userDAO.addProductToUser(userId, productId3);
-        userDAO.addProductToUser(userId, productId4);
-        final List<Product> products2 = userDAO.getProductsFromUser(userId);
+        itemDAO.addItemToUser(userId, productId3, 1);
+        itemDAO.addItemToUser(userId, productId4, 1);
+        final List<Item> products2 = itemDAO.getItemsFromUser(userId);
         final Purchase purchase2 = new Purchase(store, user, products2);
         final Integer purchaseId2 = purchaseDAO.create(purchase2);
-
 
         assertThat(purchaseDAO.getUserPurchases(userId).size() == 2).isTrue();
 
