@@ -8,6 +8,7 @@ import filter.Secured;
 import model.Item;
 import model.Product;
 
+import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -40,37 +41,39 @@ public class ItemResource {
     /**
      * Add to the cart the specified product to the user with the specified id.
      *
-     * @param userId to get from database.
-     * @param productId to be added to the user cart.
+     * @param item to add to the user cart.
+     *
      * @return the created product in the response.
      */
     @POST
     @Secured
-    @Path("/{userId}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addItemToUser(@PathParam("userId") Integer userId,
-                                  @FormParam("productId") Integer productId,
-                                  @FormParam("quantity") Integer quantity) {
+    public Response addItemToUser(@Valid Item item) {
         final ItemDAO itemDAO = new ItemDAO();
         final ProductDAO productDAO = new ProductDAO();
+
+        final Integer userId = item.getUser().getId();
+        final Integer productId = item.getProduct().getId();
+
         final Optional<Item> optionalItem = itemDAO.getItemFromUser(userId, productId);
         final Optional<Product> optionalProduct = productDAO.get(Product.class, productId);
         final Integer stock;
+
         if (optionalProduct.isPresent()) {
             final Product product = optionalProduct.get();
             stock = product.getStock();
 
             if (optionalItem.isPresent()) {
-                final Item item = optionalItem.get();
-                final Integer newQuantity = item.getQuantity() + quantity;
+                final Item old = optionalItem.get();
+                final Integer newQuantity = old.getQuantity() + item.getQuantity();
                 if (newQuantity > stock)
                     throw new BadRequestException("Quantity, " + newQuantity + " is greater than stock (" + stock + ")");
-                item.setQuantity(newQuantity);
-                itemDAO.update(item);
-                return Response.ok(item).build();
+                old.setQuantity(newQuantity);
+                itemDAO.update(old);
+                return Response.ok(old).build();
             } else {
-                itemDAO.addItemToUser(userId, productId, quantity);
+                itemDAO.addItemToUser(userId, productId, item.getQuantity());
                 return Response.ok().build();
             }
         }
@@ -80,20 +83,17 @@ public class ItemResource {
     /**
      * Delete the specified product from the user with the specified ID.
      *
-     * @param userId who has the store.
-     * @param productId to be deleted.
+     * @param item to be deleted from user.
+     *
      * @return a 204 HTTP status to confirm that the store has been deleted successfully.
      */
     @DELETE
     @Secured
-    @Path("/{userId}")
-    @Consumes(MediaType.APPLICATION_FORM_URLENCODED)
-    public Response deleteItemFromUser(@PathParam("userId") Integer userId,
-                                       @FormParam("productId") Integer productId) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response deleteItemFromUser(Item item) {
         final ItemDAO itemDAO = new ItemDAO();
-        itemDAO.deleteItemFromUser(userId, productId);
+        itemDAO.deleteItemFromUser(item.getUser().getId(), item.getProduct().getId());
         return Response.noContent().build();
-
     }
 
     /**
@@ -105,7 +105,7 @@ public class ItemResource {
      */
     @DELETE
     @Secured
-    @Path("/{userId}/all")
+    @Path("/{userId}")
     public Response deleteAllItemsFromUser(@PathParam("userId") Integer userId) {
         final ItemDAO itemDAO = new ItemDAO();
         itemDAO.deleteAllItemsFromUser(userId);
