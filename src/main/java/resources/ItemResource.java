@@ -83,16 +83,18 @@ public class ItemResource {
     /**
      * Delete the specified product from the user with the specified ID.
      *
-     * @param item to be deleted from user.
+     * @param itemId to be deleted from user.
      *
      * @return a 204 HTTP status to confirm that the store has been deleted successfully.
      */
     @DELETE
     @Secured
+    @Path("/{itemId}")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response deleteItemFromUser(Item item) {
+    public Response deleteItemFromUser(@PathParam("itemId") Integer itemId) {
         final ItemDAO itemDAO = new ItemDAO();
-        itemDAO.deleteItemFromUser(item.getUser().getId(), item.getProduct().getId());
+        final Optional<Item> optionalItem = itemDAO.get(Item.class, itemId);
+        optionalItem.ifPresent(itemDAO::delete);
         return Response.noContent().build();
     }
 
