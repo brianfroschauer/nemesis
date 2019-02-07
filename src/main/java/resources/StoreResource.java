@@ -1,10 +1,12 @@
 package resources;
 
+import dao.CategoryDAO;
 import dao.ProductDAO;
 import dao.StoreDAO;
 import dao.exception.ConstraintViolationException;
 import dao.exception.DAOException;
 import filter.Secured;
+import model.Category;
 import model.Product;
 import model.Store;
 import org.glassfish.jersey.media.multipart.FormDataParam;
@@ -138,9 +140,14 @@ public class StoreResource {
     public Response addProductToStore(@PathParam("storeId") Integer storeId, @Valid Product product) {
         final StoreDAO storeDao = new StoreDAO();
         final ProductDAO productDAO = new ProductDAO();
-        final Integer productId = productDAO.create(product);
-        storeDao.addProductToStore(storeId, productId);
-        return Response.ok(product).entity(product).build();
+        final CategoryDAO categoryDAO = new CategoryDAO();
+        final Optional<Category> optionalCategory = categoryDAO.get(Category.class, product.getCategory().getId());
+        if (optionalCategory.isPresent()) {
+            final Integer productId = productDAO.create(product);
+            storeDao.addProductToStore(storeId, productId);
+            return Response.ok(product).entity(product).build();
+        }
+        throw new dao.exception.BadRequestException("Category, " + product.getCategory().getCategory() + ", is not found");
     }
 
     /**
@@ -171,7 +178,7 @@ public class StoreResource {
             storeDAO.update(store);
             return Response.ok(store).build();
         } else {
-            throw new dao.exception.NotFoundException("Store with provided id is not found");
+            throw new dao.exception.NotFoundException("Store, " + storeId + ", is not found");
         }
     }
 

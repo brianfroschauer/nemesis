@@ -66,21 +66,22 @@ public class ItemResource {
 
             if (optionalItem.isPresent()) {
                 final Item old = optionalItem.get();
-                final Integer newQuantity = old.getQuantity() + item.getQuantity();
-                if (newQuantity > stock) {
-                    throw new BadRequestException("Quantity, " + newQuantity + " is greater than stock (" + stock + ")");
+                if (item.getQuantity() > stock) {
+                    throw new BadRequestException("Quantity, " + item.getQuantity() + " is greater than stock (" + stock + ")");
                 }
                 product.setStock(stock - item.getQuantity());
-                old.setQuantity(newQuantity);
+                productDAO.update(product);
+                old.setQuantity(old.getQuantity() + item.getQuantity());
                 itemDAO.update(old);
-                return Response.ok(old).build();
+                return Response.ok().build();
             } else {
                 itemDAO.addItemToUser(userId, productId, item.getQuantity());
                 product.setStock(stock - item.getQuantity());
+                productDAO.update(product);
                 return Response.ok().build();
             }
         }
-        throw new DAOException("Product, " + productId + "is not found");
+        throw new DAOException("Product, " + productId + " is not found");
     }
 
     /**
@@ -96,9 +97,18 @@ public class ItemResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response deleteItemFromUser(@PathParam("itemId") Integer itemId) {
         final ItemDAO itemDAO = new ItemDAO();
+        final ProductDAO productDAO = new ProductDAO();
         final Optional<Item> optionalItem = itemDAO.get(Item.class, itemId);
-        optionalItem.ifPresent(itemDAO::delete);
-        return Response.noContent().build();
+        if (optionalItem.isPresent()) {
+            final Item item = optionalItem.get();
+            final Product product = item.getProduct();
+            final Integer stock = product.getStock();
+            product.setStock(stock + item.getQuantity());
+            productDAO.update(product);
+            itemDAO.delete(item);
+            return Response.noContent().build();
+        }
+        throw new DAOException("Item, " + itemId + " is not found");
     }
 
     /**
@@ -110,7 +120,7 @@ public class ItemResource {
      */
     @DELETE
     @Secured
-    @Path("/{userId}")
+    @Path("/{userId}/all")
     public Response deleteAllItemsFromUser(@PathParam("userId") Integer userId) {
         final ItemDAO itemDAO = new ItemDAO();
         itemDAO.deleteAllItemsFromUser(userId);
