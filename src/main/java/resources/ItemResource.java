@@ -67,13 +67,16 @@ public class ItemResource {
             if (optionalItem.isPresent()) {
                 final Item old = optionalItem.get();
                 final Integer newQuantity = old.getQuantity() + item.getQuantity();
-                if (newQuantity > stock)
+                if (newQuantity > stock) {
                     throw new BadRequestException("Quantity, " + newQuantity + " is greater than stock (" + stock + ")");
+                }
+                product.setStock(stock - item.getQuantity());
                 old.setQuantity(newQuantity);
                 itemDAO.update(old);
                 return Response.ok(old).build();
             } else {
                 itemDAO.addItemToUser(userId, productId, item.getQuantity());
+                product.setStock(stock - item.getQuantity());
                 return Response.ok().build();
             }
         }
