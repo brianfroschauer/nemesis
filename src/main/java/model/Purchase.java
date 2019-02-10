@@ -16,10 +16,6 @@ public class Purchase {
     @Column(name = "purchase_id")
     private Integer id;
 
-    @OneToOne
-    @JoinColumn(name = "store_id")
-    private Store store;
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -39,8 +35,7 @@ public class Purchase {
     @Column(name = "date")
     private Date date;
 
-    public Purchase(Store store, User user, List<Item> items, Integer amount) {
-        this.store = store;
+    public Purchase(User user, List<Item> items, Integer amount) {
         this.user = user;
         this.items = items;
         this.amount = amount;
@@ -51,14 +46,6 @@ public class Purchase {
 
     public Integer getId() {
         return id;
-    }
-
-    public Store getStore() {
-        return store;
-    }
-
-    public void setStore(Store store) {
-        this.store = store;
     }
 
     public User getUser() {
@@ -99,13 +86,12 @@ public class Purchase {
         if (o == null || getClass() != o.getClass()) return false;
         Purchase purchase = (Purchase) o;
         return id.equals(purchase.id) &&
-                store.equals(purchase.store) &&
                 user.equals(purchase.user) &&
                 items.equals(purchase.items);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, store, user, items);
+        return Objects.hash(id, user, items);
     }
 }

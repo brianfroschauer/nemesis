@@ -51,14 +51,14 @@ public class PurchaseDAOTest {
         itemDAO.addItemToUser(userId, productId1, 1);
         itemDAO.addItemToUser(userId, productId2, 1);
         final List<Item> items1 = itemDAO.getItemsFromUser(userId);
-        final Purchase purchase1 = new Purchase(store, user, items1, product1.getPrice() + product2.getPrice());
+        final Purchase purchase1 = new Purchase(user, items1, product1.getPrice() + product2.getPrice());
         final Integer purchaseId1 = purchaseDAO.create(purchase1);
 
         // Sale 2
         itemDAO.addItemToUser(userId, productId3, 1);
         itemDAO.addItemToUser(userId, productId4, 1);
         final List<Item> products2 = itemDAO.getItemsFromUser(userId);
-        final Purchase purchase2 = new Purchase(store, user, products2, 1);
+        final Purchase purchase2 = new Purchase(user, products2, 1);
         final Integer purchaseId2 = purchaseDAO.create(purchase2);
 
         assertThat(purchaseDAO.getUserPurchases(userId).size() == 2).isTrue();
