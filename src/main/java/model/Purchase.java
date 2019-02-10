@@ -1,10 +1,7 @@
 package model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Author: brianfroschauer
@@ -42,12 +39,12 @@ public class Purchase {
     @Column(name = "date")
     private Date date;
 
-    public Purchase(Store store, User user, List<Item> items, Integer amount, Date date) {
+    public Purchase(Store store, User user, List<Item> items, Integer amount) {
         this.store = store;
         this.user = user;
         this.items = items;
         this.amount = amount;
-        this.date = date;
+        this.date = Calendar.getInstance().getTime();
     }
 
     public Purchase() {}
