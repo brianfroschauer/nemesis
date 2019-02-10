@@ -1,7 +1,5 @@
 package model;
 
-import org.jetbrains.annotations.NotNull;
-
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,16 +36,18 @@ public class Purchase {
     private List<Item> items = new ArrayList<>();
 
     @Column(name = "amount")
-    private double amount;
+    private Integer amount;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "date")
     private Date date;
 
-    public Purchase(Store store, User user, List<Item> items) {
+    public Purchase(Store store, User user, List<Item> items, Integer amount, Date date) {
         this.store = store;
         this.user = user;
         this.items = items;
+        this.amount = amount;
+        this.date = date;
     }
 
     public Purchase() {}
@@ -84,7 +84,7 @@ public class Purchase {
         return amount;
     }
 
-    public void setAmount(double amount) {
+    public void setAmount(Integer amount) {
         this.amount = amount;
     }
 
