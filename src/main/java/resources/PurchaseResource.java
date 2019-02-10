@@ -15,7 +15,7 @@ import java.util.*;
  * Date: 2019-01-07
  */
 @Path("/purchases")
-public class SaleResource {
+public class PurchaseResource {
 
     @Context
     private UriInfo uriInfo;
@@ -30,12 +30,12 @@ public class SaleResource {
     @POST
     @Secured
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createSale(@Valid Purchase purchase) {
+    public Response createPurchase(@Valid Purchase purchase) {
         final PurchaseDAO purchaseDAO = new PurchaseDAO();
         final Integer saleId = purchaseDAO.create(purchase);
         final UriBuilder builder = uriInfo.getAbsolutePathBuilder();
         builder.path(saleId.toString());
-        EmailSender.sendConfirmationEmail(purchase.getUser().getEmail(),
+        EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
                 "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
         return Response.created(builder.build()).build();
     }
