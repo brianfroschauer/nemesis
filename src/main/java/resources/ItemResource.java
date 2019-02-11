@@ -2,11 +2,16 @@ package resources;
 
 import dao.ItemDAO;
 import dao.ProductDAO;
+import dao.PurchaseDAO;
+import dao.UserDAO;
 import dao.exception.BadRequestException;
 import dao.exception.DAOException;
 import filter.Secured;
 import model.Item;
 import model.Product;
+import model.Purchase;
+import model.User;
+import util.EmailSender;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -82,6 +87,38 @@ public class ItemResource {
             }
         }
         throw new DAOException("Product, " + productId + " is not found");
+    }
+
+    /**
+     * Delete all products from the user with the specified ID.
+     *
+     * @param userId who has the store.
+     *
+     * @return a 204 HTTP status to confirm that the store has been deleted successfully.
+     */
+    @POST
+    @Secured
+    @Path("/{userId}/checkout")
+    public Response checkout(@PathParam("userId") Integer userId) {
+        final ItemDAO itemDAO = new ItemDAO();
+        final UserDAO userDAO = new UserDAO();
+        final PurchaseDAO purchaseDAO = new PurchaseDAO();
+        final Optional<User> optionalUser = userDAO.get(User.class, userId);
+        if (optionalUser.isPresent()) {
+            final List<Item> items = itemDAO.getItemsFromUser(userId);
+            final User user = optionalUser.get();
+            Integer amount = 0;
+            for (Item item : items) amount += item.getProduct().getPrice();
+            final Purchase purchase = new Purchase(user, items, amount);
+            purchaseDAO.create(purchase);
+            for (Item item : items) {
+                item.setActive(false);
+                itemDAO.update(item);
+            }
+            EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
+                    "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
+            return Response.ok().build();
+        } else throw new BadRequestException("User, " + userId + ", is not found");
     }
 
     /**

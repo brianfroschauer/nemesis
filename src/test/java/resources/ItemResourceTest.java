@@ -65,10 +65,11 @@ public class ItemResourceTest extends JerseyTest {
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
         assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
+
         userDAO.delete(userDAO.get(User.class, userId).get());
         productDAO.delete(productDAO.get(Product.class, productId).get());
         categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
-        itemDAO.deleteAllItemsFromUser(userId);
+
         assertThat(itemDAO.getItemsFromUser(userId).isEmpty()).isTrue();
     }
 
@@ -104,6 +105,43 @@ public class ItemResourceTest extends JerseyTest {
         // Delete entities from database
         itemDAO.deleteAllItemsFromUser(userId);
         assertThat(itemDAO.getItemsFromUser(userId).isEmpty()).isTrue();
+        assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
+        assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
+        assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();
+        userDAO.delete(userDAO.get(User.class, userId).get());
+        productDAO.delete(productDAO.get(Product.class, productId).get());
+        categoryDAO.delete(categoryDAO.get(Category.class, categoryId).get());
+    }
+
+    @Test
+    public void deleteAllItemsFromUserTest() {
+        final UserDAO userDAO = new UserDAO();
+        final ItemDAO itemDAO = new ItemDAO();
+        final ProductDAO productDAO = new ProductDAO();
+        final AbstractDAO<Category> categoryDAO = new AbstractDAO<>();
+
+        final User user = new User(
+                "email@mail.com",
+                "username",
+                "password",
+                "name",
+                "surname");
+        final Integer userId = userDAO.create(user);
+
+        final Category category = new Category("category");
+        final Integer categoryId = categoryDAO.create(category);
+
+        final Product product = new Product("name", 0, 1, category);
+        final Integer productId = productDAO.create(product);
+
+        itemDAO.addItemToUser(userId, productId, 1);
+
+        assertThat(itemDAO.getItemsFromUser(userId).isEmpty()).isFalse();
+
+        target("/items/" + userId + "/all").request().delete();
+
+        assertThat(itemDAO.getItemsFromUser(userId).isEmpty()).isTrue();
+
         assertThat(userDAO.get(User.class, userId).isPresent()).isTrue();
         assertThat(productDAO.get(Product.class, productId).isPresent()).isTrue();
         assertThat(categoryDAO.get(Category.class, categoryId).isPresent()).isTrue();

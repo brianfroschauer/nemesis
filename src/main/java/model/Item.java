@@ -27,10 +27,14 @@ public class Item {
     @Column(name = "quantity", nullable = false)
     private Integer quantity;
 
+    @Column(name = "active", nullable = false)
+    private Boolean active;
+
     public Item(User user, Product product, Integer quantity) {
         this.user = user;
         this.product = product;
         this.quantity = quantity;
+        this.active = true;
     }
 
     public Item() {}
@@ -61,6 +65,14 @@ public class Item {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     @Override

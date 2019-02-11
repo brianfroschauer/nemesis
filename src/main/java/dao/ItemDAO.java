@@ -18,6 +18,13 @@ import java.util.Optional;
  */
 public class ItemDAO extends AbstractDAO<Item> {
 
+    /**
+     * Gets an specified item from user cart.
+     *
+     * @param userId from which the item will be obtained.
+     * @param productId of the specific item.
+     * @return an optional Item.
+     */
     public Optional<Item> getItemFromUser(Integer userId, Integer productId) {
         Transaction tx = null;
         final Optional<Item> optionalItem;
@@ -26,7 +33,8 @@ public class ItemDAO extends AbstractDAO<Item> {
             final String hql = "SELECT item " +
                                "FROM Item item " +
                                "WHERE item.user.id = :userId AND " +
-                               "item.product.id = :productId";
+                               "item.product.id = :productId AND " +
+                               "item.active = true";
             final Query<Item> query = session.createQuery(hql, Item.class);
             query.setParameter("userId", userId);
             query.setParameter("productId", productId);
@@ -55,7 +63,8 @@ public class ItemDAO extends AbstractDAO<Item> {
             tx = session.beginTransaction();
             final String hql = "SELECT item " +
                                "FROM Item item " +
-                               "WHERE item.user.id = :userId";
+                               "WHERE item.user.id = :userId " +
+                               "AND item.active = true";
             final Query<Item> query = session.createQuery(hql, Item.class);
             query.setParameter("userId", userId);
             list = query.list();
@@ -125,13 +134,9 @@ public class ItemDAO extends AbstractDAO<Item> {
         Transaction tx = null;
         try (Session session = HibernateUtil.openSession()) {
             tx = session.beginTransaction();
-            final String hql = "SELECT item " +
-                               "FROM Item item " +
-                               "WHERE item.user.id = :userId";
-            final Query<Item> query = session.createQuery(hql, Item.class);
-            query.setParameter("userId", userId);
-            final List<Item> items = query.list();
-            for (Item item : items) session.delete(item);
+            final String hql = "DELETE FROM Item item WHERE item.user.id = :userId";
+            final Query query = session.createQuery(hql);
+            query.setParameter("userId", userId).executeUpdate();
             tx.commit();
         } catch (RuntimeException e) {
             if (tx != null) tx.rollback();

@@ -39,7 +39,7 @@ public class Purchase {
         this.user = user;
         this.items = items;
         this.amount = amount;
-        this.date = Calendar.getInstance().getTime();
+        this.date = new Date();
     }
 
     public Purchase() {}
