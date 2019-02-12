@@ -1,5 +1,6 @@
 package model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -154,12 +155,18 @@ public class User {
         comments.add(comment);
     }
 
+    @JsonIgnore
     public List<Purchase> getPurchases() {
         return purchases;
     }
 
     public void addPurchase(Purchase purchase) {
         purchases.add(purchase);
+    }
+
+    @JsonIgnore
+    public List<Item> getItems() {
+        return items;
     }
 
     @Override

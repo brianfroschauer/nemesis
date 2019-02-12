@@ -69,21 +69,22 @@ public class ItemResource {
             final Product product = optionalProduct.get();
             stock = product.getStock();
 
-            if (optionalItem.isPresent()) {
-                final Item old = optionalItem.get();
-                if (item.getQuantity() > stock) {
-                    throw new BadRequestException("Quantity, " + item.getQuantity() + " is greater than stock (" + stock + ")");
-                }
-                product.setStock(stock - item.getQuantity());
-                productDAO.update(product);
-                old.setQuantity(old.getQuantity() + item.getQuantity());
-                itemDAO.update(old);
-                return Response.ok().build();
+            if (item.getQuantity() > stock) {
+                throw new BadRequestException("Quantity, " + item.getQuantity() + " is greater than stock (" + stock + ")");
             } else {
-                itemDAO.addItemToUser(userId, productId, item.getQuantity());
-                product.setStock(stock - item.getQuantity());
-                productDAO.update(product);
-                return Response.ok().build();
+                if (optionalItem.isPresent()) {
+                    final Item old = optionalItem.get();
+                    product.setStock(stock - item.getQuantity());
+                    productDAO.update(product);
+                    old.setQuantity(old.getQuantity() + item.getQuantity());
+                    itemDAO.update(old);
+                    return Response.ok().build();
+                } else {
+                    itemDAO.addItemToUser(userId, productId, item.getQuantity());
+                    product.setStock(stock - item.getQuantity());
+                    productDAO.update(product);
+                    return Response.ok().build();
+                }
             }
         }
         throw new DAOException("Product, " + productId + " is not found");
@@ -105,19 +106,22 @@ public class ItemResource {
         final PurchaseDAO purchaseDAO = new PurchaseDAO();
         final Optional<User> optionalUser = userDAO.get(User.class, userId);
         if (optionalUser.isPresent()) {
-            final List<Item> items = itemDAO.getItemsFromUser(userId);
             final User user = optionalUser.get();
-            Integer amount = 0;
-            for (Item item : items) amount += item.getProduct().getPrice();
-            final Purchase purchase = new Purchase(user, items, amount);
-            purchaseDAO.create(purchase);
-            for (Item item : items) {
-                item.setActive(false);
-                itemDAO.update(item);
-            }
-            EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
-                    "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
-            return Response.ok().build();
+            final List<Item> items = itemDAO.getItemsFromUser(userId);
+            if (!items.isEmpty()) {
+                Integer amount = 0;
+                for (Item item : items) amount += item.getProduct().getPrice();
+                final Purchase purchase = new Purchase(user, items, amount);
+                purchaseDAO.create(purchase);
+                for (Item item : items) {
+                    item.setActive(false);
+                    itemDAO.update(item);
+                }
+                EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
+                        "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
+                return Response.ok().build();
+            } else throw new BadRequestException("Empty cart");
+
         } else throw new BadRequestException("User, " + userId + ", is not found");
     }
 

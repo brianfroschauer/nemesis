@@ -1,5 +1,8 @@
 package model;
 
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
+
 import javax.persistence.*;
 import java.util.*;
 
@@ -26,6 +29,7 @@ public class Purchase {
             joinColumns = { @JoinColumn(name = "purchase_id") },
             inverseJoinColumns = { @JoinColumn(name = "item_id") }
     )
+    @LazyCollection(LazyCollectionOption.FALSE)
     private List<Item> items = new ArrayList<>();
 
     @Column(name = "amount")
