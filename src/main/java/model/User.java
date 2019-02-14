@@ -44,6 +44,7 @@ public class User {
     @JoinColumn(name = "address_id")
     private Address address;
 
+    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "USER_STORE",
@@ -53,14 +54,17 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Store> stores = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Comment> comments = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Purchase> purchases = new ArrayList<>();
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Item> items = new ArrayList<>();
@@ -155,7 +159,6 @@ public class User {
         comments.add(comment);
     }
 
-    @JsonIgnore
     public List<Purchase> getPurchases() {
         return purchases;
     }
@@ -164,7 +167,6 @@ public class User {
         purchases.add(purchase);
     }
 
-    @JsonIgnore
     public List<Item> getItems() {
         return items;
     }

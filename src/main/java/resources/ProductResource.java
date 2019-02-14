@@ -1,8 +1,10 @@
 package resources;
 
+import dao.CommentDAO;
 import dao.ProductDAO;
 import dao.exception.DAOException;
 import filter.Secured;
+import model.Comment;
 import model.Product;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import util.ImageWriter;
@@ -57,6 +59,20 @@ public class ProductResource {
         final ProductDAO productDao = new ProductDAO();
         final List<Product> products = productDao.getAll(Product.class);
         return Response.ok(products).build();
+    }
+
+    /**
+     * Get all existing products.
+     *
+     * @return a list of existing products in the response.
+     */
+    @GET
+    @Path("/{productId}/comments")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getCommentsFromProduct(@PathParam("productId") Integer productId) {
+        final CommentDAO commentDAO = new CommentDAO();
+        final List<Comment> comments = commentDAO.getCommentsFromProduct(productId);
+        return Response.ok(comments).build();
     }
 
     /**
