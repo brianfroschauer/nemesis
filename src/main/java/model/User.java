@@ -44,7 +44,6 @@ public class User {
     @JoinColumn(name = "address_id")
     private Address address;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "USER_STORE",
