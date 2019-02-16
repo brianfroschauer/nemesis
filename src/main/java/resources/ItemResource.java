@@ -118,7 +118,7 @@ public class ItemResource {
                     itemDAO.update(item);
                 }
                 EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
-                        "Congratulations on your purchase, " + purchase.getUser().getName() + "!");
+                        "Congratulations on your purchase, " + purchase.getUser().getName() + "!", items);
                 return Response.ok().build();
             } else throw new BadRequestException("Empty cart");
 
