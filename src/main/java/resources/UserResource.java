@@ -163,6 +163,12 @@ public class UserResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response updateUser(@Valid User user) {
         final UserDAO userDao = new UserDAO();
+        final Optional<User> optionalUser = userDao.get(User.class, user.getId());
+        if (optionalUser.isPresent()) {
+            final User old = optionalUser.get();
+            user.setImage(old.getImage());
+            user.setPassword(old.getPassword());
+        }
         userDao.update(user);
         return Response.ok(user).build();
     }
