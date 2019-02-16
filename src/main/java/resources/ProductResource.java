@@ -6,7 +6,6 @@ import dao.exception.DAOException;
 import filter.Secured;
 import model.Comment;
 import model.Product;
-import model.Store;
 import org.glassfish.jersey.media.multipart.FormDataParam;
 import util.ImageWriter;
 
@@ -141,15 +140,11 @@ public class ProductResource {
     public Response updateProduct(Product product) {
         final ProductDAO productDao = new ProductDAO();
         final Optional<Product> optionalProduct = productDao.get(Product.class, product.getId());
-
-        //// This shit is temporary ////
-        Store store = new Store();
         if (optionalProduct.isPresent()) {
-            store = optionalProduct.get().getStore();
+            Product old = optionalProduct.get();
+            product.setStore(old.getStore());
+            product.setImage(old.getImage());
         }
-        product.setStore(store);
-        //////////////////////////////
-
         productDao.update(product);
         return Response.ok(product).build();
     }
