@@ -145,7 +145,7 @@ public class StoreResource {
         if (optionalCategory.isPresent()) {
             final Integer productId = productDAO.create(product);
             storeDao.addProductToStore(storeId, productId);
-            return Response.ok(product).entity(product).build();
+            return Response.ok(product).build();
         }
         throw new dao.exception.BadRequestException("Category, " + product.getCategory().getCategory() + ", is not found");
     }

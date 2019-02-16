@@ -35,7 +35,7 @@ public class Store {
     @ManyToMany(mappedBy = "stores", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<User> users = new ArrayList<>();
-
+    
     @OneToMany(mappedBy = "store", cascade = CascadeType.REMOVE)
     @LazyCollection(LazyCollectionOption.FALSE)
     private List<Product> products = new ArrayList<>();
