@@ -33,7 +33,6 @@ public class ProductResource {
      * @return a product with the specified ID in the response.
      */
     @GET
-    @Secured
     @Path("/{productId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getProduct(@PathParam("productId") Integer productId) {

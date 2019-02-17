@@ -256,12 +256,9 @@ public class EmailSender {
         String itemList = "";
 
         for (Item item: items) {
-            String product1 = "<tr><td style=\"font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #3498db; border-radius: 5px; text-align: center;\" valign=\"top\" bgcolor=\"#3498db\" align=\"center\"> <a href=\"http://localhost:4200/product/"+item.getProduct().getId()+"\" target=\"_blank\" style=\"display: inline-block; color: #ffffff; background-color: #3498db; border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #3498db;\">"+ "Product: " + item.getProduct().getName() + ", Cantidad: " + item.getQuantity() + "</a></td></tr><br>";
-            String product = "<a href=\"http://localhost:8080/products/" + item.getProduct().getId() + "\"></a>\n";
-            itemList += product1;
+            String product = "<tr><td style=\"font-family: sans-serif; font-size: 14px; vertical-align: top; background-color: #3498db; border-radius: 5px; text-align: center;\" valign=\"top\" bgcolor=\"#3498db\" align=\"center\"> <a href=\"http://localhost:4200/product/"+item.getProduct().getId()+"\" target=\"_blank\" style=\"display: inline-block; color: #ffffff; background-color: #3498db; border: solid 1px #3498db; border-radius: 5px; box-sizing: border-box; cursor: pointer; text-decoration: none; font-size: 14px; font-weight: bold; margin: 0; padding: 12px 25px; text-transform: capitalize; border-color: #3498db;\">"+ "Product: " + item.getProduct().getName() + ", Cantidad: " + item.getQuantity() + "</a></td></tr><br>";
+            itemList += product;
         }
-
-        System.out.println(itemList);
 
         return "<!doctype html>\n" +
                 "<html>\n" +

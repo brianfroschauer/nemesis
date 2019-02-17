@@ -40,7 +40,6 @@ public class StoreResource {
      * @return a store with the specified ID in the response.
      */
     @GET
-    @Secured
     @Path("/{storeId}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getStore(@PathParam("storeId") Integer storeId) {
