@@ -27,7 +27,6 @@ dependencies {
     compile group: 'org.glassfish.jersey.containers', name: 'jersey-container-servlet', version: '2.14'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.14'
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-multipart', version: '2.14'
-
     testCompile group: 'org.glassfish.jersey.test-framework.providers', name: 'jersey-test-framework-provider-grizzly2', version: '2.14'
 
     // Java mail
@@ -41,6 +40,9 @@ dependencies {
 
     // Annotations
     compile group: 'org.jetbrains', name: 'annotations', version: '15.0'
+
+    // Mercado Pago
+    // compile group: 'com.mercadopago', name: 'dx-java', version: '1.0.36'
 
     // JUnit
     testCompile group: 'org.assertj', name: 'assertj-core', version: '3.6.1'

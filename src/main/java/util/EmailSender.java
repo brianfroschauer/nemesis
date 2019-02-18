@@ -199,7 +199,7 @@ public class EmailSender {
             "</body>\n" +
             "</html>";
 
-    public static void sendPurchaseEmail(String recipient, String subject, List<Item> items) {
+    public static void sendPurchaseEmail(String recipient, String subject, List<Item> items, PaymentData paymentData) {
         final Properties props = System.getProperties();
         props.put("mail.smtp.starttls.enable", "true");
         props.put("mail.smtp.host", "smtp.gmail.com");
@@ -215,7 +215,7 @@ public class EmailSender {
             message.setFrom(new InternetAddress(username));
             message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipient));
             message.setSubject(subject);
-            message.setContent(getPurchaseHtml(items), "text/html");
+            message.setContent(getPurchaseHtml(items, paymentData), "text/html");
             Transport transport = session.getTransport("smtp");
             transport.connect("smtp.gmail.com", username, password);
             transport.sendMessage(message, message.getAllRecipients());
@@ -251,7 +251,7 @@ public class EmailSender {
         }
     }
 
-    private static String getPurchaseHtml(List<Item> items) {
+    private static String getPurchaseHtml(List<Item> items, PaymentData paymentData) {
 
         String itemList = "";
 
@@ -405,6 +405,10 @@ public class EmailSender {
                 "                                            </tr>\n" +
                 "                                            </tbody>\n" +
                 "                                        </table>\n" +
+                "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">Información del comprador:\n" +
+                "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">Nombre: " + paymentData.getCustomer() + "\n" +
+                "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">DNI: " + paymentData.getDni() + "\n" +
+                "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">Direccion: " + paymentData.getAddress() + "\n" +
                 "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">Gracias por comprar con nosotros!</p>\n" +
                 "                                        <p style=\"font-family: sans-serif; font-size: 14px; font-weight: normal; margin: 0; Margin-bottom: 15px;\">Que tengas un buen día.</p>\n" +
                 "                                    </td>\n" +

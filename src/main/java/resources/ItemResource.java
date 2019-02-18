@@ -12,6 +12,7 @@ import model.Product;
 import model.Purchase;
 import model.User;
 import util.EmailSender;
+import util.PaymentData;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
@@ -100,7 +101,8 @@ public class ItemResource {
     @POST
     @Secured
     @Path("/{userId}/checkout")
-    public Response checkout(@PathParam("userId") Integer userId) {
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response checkout(@PathParam("userId") Integer userId, PaymentData paymentData) {
         final ItemDAO itemDAO = new ItemDAO();
         final UserDAO userDAO = new UserDAO();
         final PurchaseDAO purchaseDAO = new PurchaseDAO();
@@ -117,8 +119,11 @@ public class ItemResource {
                     item.setActive(false);
                     itemDAO.update(item);
                 }
-                EmailSender.sendPurchaseEmail(purchase.getUser().getEmail(),
-                        "Congratulations on your purchase, " + purchase.getUser().getName() + "!", items);
+                EmailSender.sendPurchaseEmail(
+                        purchase.getUser().getEmail(),
+                        "Congratulations on your purchase, " + purchase.getUser().getName() + "!",
+                        items,
+                        paymentData);
                 return Response.ok().build();
             } else throw new BadRequestException("Empty cart");
 
